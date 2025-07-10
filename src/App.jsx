@@ -44,6 +44,7 @@ function App() {
       home: 'Accueil',
       favorites: 'Favoris',
       alerts: 'Alertes',
+      charts: 'Graphiques',
       settings: 'Paramètres',
       feelsLike: 'Ressenti',
       humidity: 'Humidité',
@@ -51,7 +52,12 @@ function App() {
       pressure: 'Pression',
       nextHours: 'Prochaines heures',
       nextDays: 'Prochains jours',
-      today: 'Aujourd\'hui'
+      today: 'Aujourd\'hui',
+      temperatureTrend: 'Évolution de la température',
+      humidityTrend: 'Évolution de l\'humidité',
+      pressureTrend: 'Évolution de la pression',
+      windTrend: 'Évolution du vent',
+      weeklyTemperature: 'Températures de la semaine'
     },
     ar: {
       title: 'طقس المغرب',
@@ -60,6 +66,7 @@ function App() {
       home: 'الرئيسية',
       favorites: 'المفضلة',
       alerts: 'التنبيهات',
+      charts: 'الرسوم البيانية',
       settings: 'الإعدادات',
       feelsLike: 'يشعر وكأنه',
       humidity: 'الرطوبة',
@@ -67,11 +74,279 @@ function App() {
       pressure: 'الضغط',
       nextHours: 'الساعات القادمة',
       nextDays: 'الأيام القادمة',
-      today: 'اليوم'
+      today: 'اليوم',
+      temperatureTrend: 'تطور درجة الحرارة',
+      humidityTrend: 'تطور الرطوبة',
+      pressureTrend: 'تطور الضغط',
+      windTrend: 'تطور الرياح',
+      weeklyTemperature: 'درجات حرارة الأسبوع'
     }
   }
 
   const t = translations[language] || translations.fr
+
+  // Fonctions pour les diagrammes
+  const createTemperatureChart = (forecastData) => {
+    if (!forecastData) return []
+
+    return forecastData.list.slice(0, 24).map((item, index) => ({
+      time: new Date(item.dt * 1000).getHours(),
+      temp: Math.round(item.main.temp),
+      humidity: item.main.humidity,
+      pressure: item.main.pressure,
+      wind: Math.round(item.wind.speed * 3.6)
+    }))
+  }
+
+  const createWeeklyChart = (forecastData) => {
+    if (!forecastData) return []
+
+    const dailyData = []
+    for (let i = 0; i < forecastData.list.length; i += 8) {
+      const dayData = forecastData.list[i]
+      dailyData.push({
+        day: new Date(dayData.dt * 1000).toLocaleDateString('fr-FR', {weekday: 'short'}),
+        maxTemp: Math.round(dayData.main.temp_max),
+        minTemp: Math.round(dayData.main.temp_min),
+        humidity: dayData.main.humidity
+      })
+    }
+    return dailyData.slice(0, 7)
+  }
+
+  // Composant diagramme simple en barres
+  const SimpleBarChart = ({ data, dataKey, color, height = 100, label }) => (
+    <div style={{ marginBottom: '20px' }}>
+      <h4 style={{ marginBottom: '10px', fontSize: '16px', opacity: 0.9 }}>{label}</h4>
+      <div style={{
+        display: 'flex',
+        alignItems: 'end',
+        justifyContent: 'space-between',
+        height: height,
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        borderRadius: '10px',
+        padding: '10px',
+        backdropFilter: 'blur(10px)'
+      }}>
+        {data.map((item, index) => {
+          const maxValue = Math.max(...data.map(d => d[dataKey]))
+          const barHeight = (item[dataKey] / maxValue) * (height - 40)
+
+          return (
+            <div key={index} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              flex: 1
+            }}>
+              <div style={{
+                fontSize: '10px',
+                marginBottom: '5px',
+                fontWeight: '600'
+              }}>
+                {item[dataKey]}
+              </div>
+              <div style={{
+                width: '20px',
+                height: barHeight,
+                backgroundColor: color,
+                borderRadius: '3px 3px 0 0',
+                marginBottom: '5px'
+              }}></div>
+              <div style={{
+                fontSize: '10px',
+                opacity: 0.8
+              }}>
+                {item.time !== undefined ? `${item.time}h` : item.day}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+
+  // Composant diagramme linéaire simple
+  const SimpleLineChart = ({ data, dataKey, color, height = 100, label }) => {
+    const maxValue = Math.max(...data.map(d => d[dataKey]))
+    const minValue = Math.min(...data.map(d => d[dataKey]))
+    const range = maxValue - minValue || 1
+
+    const points = data.map((item, index) => {
+      const x = (index / (data.length - 1)) * 280
+      const y = height - 20 - ((item[dataKey] - minValue) / range) * (height - 40)
+      return `${x},${y}`
+    }).join(' ')
+
+    return (
+      <div style={{ marginBottom: '20px' }}>
+        <h4 style={{ marginBottom: '10px', fontSize: '16px', opacity: 0.9 }}>{label}</h4>
+        <div style={{
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          borderRadius: '10px',
+          padding: '15px',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <svg width="100%" height={height} viewBox={`0 0 280 ${height}`}>
+            <polyline
+              fill="none"
+              stroke={color}
+              strokeWidth="3"
+              points={points}
+              style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}
+            />
+            {data.map((item, index) => {
+              const x = (index / (data.length - 1)) * 280
+              const y = height - 20 - ((item[dataKey] - minValue) / range) * (height - 40)
+              return (
+                <g key={index}>
+                  <circle cx={x} cy={y} r="4" fill={color} />
+                  <text x={x} y={y - 10} textAnchor="middle" fontSize="10" fill="white" fontWeight="600">
+                    {item[dataKey]}
+                  </text>
+                </g>
+              )
+            })}
+          </svg>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '10px'
+          }}>
+            {data.map((item, index) => (
+              <div key={index} style={{
+                fontSize: '10px',
+                opacity: 0.8,
+                textAlign: 'center',
+                flex: 1
+              }}>
+                {item.time !== undefined ? `${item.time}h` : item.day}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Composant diagramme circulaire (gauge)
+  const CircularGauge = ({ value, maxValue, color, label, unit }) => {
+    const percentage = (value / maxValue) * 100
+    const strokeDasharray = 2 * Math.PI * 45
+    const strokeDashoffset = strokeDasharray - (strokeDasharray * percentage) / 100
+
+    return (
+      <div style={{
+        textAlign: 'center',
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        borderRadius: '15px',
+        padding: '20px',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <h4 style={{ marginBottom: '15px', fontSize: '16px', opacity: 0.9 }}>{label}</h4>
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle
+              cx="60"
+              cy="60"
+              r="45"
+              fill="none"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="8"
+            />
+            <circle
+              cx="60"
+              cy="60"
+              r="45"
+              fill="none"
+              stroke={color}
+              strokeWidth="8"
+              strokeLinecap="round"
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              transform="rotate(-90 60 60)"
+              style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
+            />
+          </svg>
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontSize: '20px',
+            fontWeight: '600'
+          }}>
+            {value}{unit}
+          </div>
+        </div>
+        <div style={{ marginTop: '10px', fontSize: '12px', opacity: 0.8 }}>
+          {percentage.toFixed(0)}%
+        </div>
+      </div>
+    )
+  }
+
+  // Composant diagramme en secteurs (conditions météo)
+  const WeatherPieChart = ({ weather }) => {
+    if (!weather) return null
+
+    const conditions = [
+      { name: 'Température', value: weather.main.temp, color: '#FF5722', max: 50 },
+      { name: 'Humidité', value: weather.main.humidity, color: '#2196F3', max: 100 },
+      { name: 'Pression', value: (weather.main.pressure - 950) / 100 * 100, color: '#4CAF50', max: 100 },
+      { name: 'Vent', value: weather.wind.speed * 10, color: '#FFC107', max: 100 }
+    ]
+
+    return (
+      <div style={{
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        borderRadius: '15px',
+        padding: '20px',
+        backdropFilter: 'blur(10px)',
+        marginBottom: '20px'
+      }}>
+        <h4 style={{ marginBottom: '20px', fontSize: '16px', opacity: 0.9, textAlign: 'center' }}>
+          Conditions actuelles
+        </h4>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '15px'
+        }}>
+          {conditions.map((condition, index) => (
+            <div key={index} style={{
+              textAlign: 'center',
+              padding: '15px',
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              borderRadius: '10px'
+            }}>
+              <div style={{
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                backgroundColor: condition.color,
+                margin: '0 auto 10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: 'white'
+              }}>
+                {condition.name === 'Température' ? `${Math.round(condition.value)}°` :
+                 condition.name === 'Humidité' ? `${condition.value}%` :
+                 condition.name === 'Pression' ? `${weather.main.pressure}` :
+                 `${Math.round(weather.wind.speed * 3.6)}`}
+              </div>
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>
+                {condition.name}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   // Fonctions utilitaires
   const getWeatherIcon = (iconCode) => {
@@ -679,6 +954,151 @@ function App() {
           </div>
         )}
 
+        {/* Onglet Graphiques */}
+        {activeTab === 'charts' && (
+          <div style={{ padding: '30px 20px' }}>
+            <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>
+              📊 {t.charts}
+            </h2>
+
+            {forecast && weather && (
+              <>
+                {/* Conditions météo actuelles en cercles */}
+                <WeatherPieChart weather={weather} />
+
+                {/* Jauges circulaires pour les conditions actuelles */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '15px',
+                  marginBottom: '30px'
+                }}>
+                  <CircularGauge
+                    value={weather.main.humidity}
+                    maxValue={100}
+                    color="#2196F3"
+                    label="Humidité"
+                    unit="%"
+                  />
+                  <CircularGauge
+                    value={Math.round(weather.wind.speed * 3.6)}
+                    maxValue={100}
+                    color="#FFC107"
+                    label="Vent"
+                    unit=" km/h"
+                  />
+                </div>
+
+                {/* Graphique de température sur 24h */}
+                <SimpleLineChart
+                  data={createTemperatureChart(forecast)}
+                  dataKey="temp"
+                  color="#FF5722"
+                  height={120}
+                  label={t.temperatureTrend}
+                />
+
+                {/* Graphique d'humidité sur 24h */}
+                <SimpleLineChart
+                  data={createTemperatureChart(forecast)}
+                  dataKey="humidity"
+                  color="#2196F3"
+                  height={120}
+                  label={t.humidityTrend}
+                />
+
+                {/* Graphique de pression sur 24h */}
+                <SimpleLineChart
+                  data={createTemperatureChart(forecast)}
+                  dataKey="pressure"
+                  color="#4CAF50"
+                  height={120}
+                  label={t.pressureTrend}
+                />
+
+                {/* Graphique de vent sur 24h */}
+                <SimpleBarChart
+                  data={createTemperatureChart(forecast)}
+                  dataKey="wind"
+                  color="#FFC107"
+                  height={120}
+                  label={t.windTrend}
+                />
+
+                {/* Graphique des températures de la semaine */}
+                <div style={{ marginTop: '30px' }}>
+                  <h4 style={{ marginBottom: '15px', fontSize: '16px', opacity: 0.9 }}>
+                    {t.weeklyTemperature}
+                  </h4>
+                  <div style={{
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    borderRadius: '15px',
+                    padding: '20px',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    {createWeeklyChart(forecast).map((day, index) => (
+                      <div key={index} style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '15px 0',
+                        borderBottom: index < createWeeklyChart(forecast).length - 1 ? '1px solid rgba(255,255,255,0.2)' : 'none'
+                      }}>
+                        <div style={{ fontWeight: '600', minWidth: '60px' }}>
+                          {day.day}
+                        </div>
+                        <div style={{
+                          flex: 1,
+                          margin: '0 15px',
+                          height: '20px',
+                          backgroundColor: 'rgba(255,255,255,0.2)',
+                          borderRadius: '10px',
+                          position: 'relative',
+                          overflow: 'hidden'
+                        }}>
+                          <div style={{
+                            position: 'absolute',
+                            left: 0,
+                            top: 0,
+                            height: '100%',
+                            width: `${(day.maxTemp / 50) * 100}%`,
+                            background: 'linear-gradient(90deg, #FF5722, #FFC107)',
+                            borderRadius: '10px'
+                          }}></div>
+                        </div>
+                        <div style={{
+                          display: 'flex',
+                          gap: '10px',
+                          minWidth: '80px',
+                          justifyContent: 'flex-end'
+                        }}>
+                          <span style={{ fontWeight: '600' }}>{day.maxTemp}°</span>
+                          <span style={{ opacity: 0.7 }}>{day.minTemp}°</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {!forecast && (
+              <div style={{
+                textAlign: 'center',
+                padding: '50px 20px',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                borderRadius: '15px',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <div style={{ fontSize: '40px', marginBottom: '20px' }}>📊</div>
+                <p style={{ opacity: 0.8 }}>
+                  Chargez les données météo pour voir les graphiques
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Onglet Alertes */}
         {activeTab === 'alerts' && (
           <div style={{
@@ -806,12 +1226,12 @@ function App() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '5px',
-            fontSize: '12px',
+            gap: '3px',
+            fontSize: '10px',
             fontWeight: '600'
           }}
         >
-          <span style={{ fontSize: '24px' }}>🏠</span>
+          <span style={{ fontSize: '20px' }}>🏠</span>
           {t.home}
         </button>
 
@@ -828,13 +1248,35 @@ function App() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '5px',
-            fontSize: '12px',
+            gap: '3px',
+            fontSize: '10px',
             fontWeight: '600'
           }}
         >
-          <span style={{ fontSize: '24px' }}>⭐</span>
+          <span style={{ fontSize: '20px' }}>⭐</span>
           {t.favorites}
+        </button>
+
+        {/* Bouton Graphiques */}
+        <button
+          onClick={() => setActiveTab('charts')}
+          style={{
+            flex: 1,
+            border: 'none',
+            backgroundColor: 'transparent',
+            color: activeTab === 'charts' ? '#2196F3' : '#666',
+            cursor: 'pointer',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '3px',
+            fontSize: '10px',
+            fontWeight: '600'
+          }}
+        >
+          <span style={{ fontSize: '20px' }}>📊</span>
+          {t.charts}
         </button>
 
         {/* Bouton Alertes */}
@@ -850,12 +1292,12 @@ function App() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '5px',
-            fontSize: '12px',
+            gap: '3px',
+            fontSize: '10px',
             fontWeight: '600'
           }}
         >
-          <span style={{ fontSize: '24px' }}>🔔</span>
+          <span style={{ fontSize: '20px' }}>🔔</span>
           {t.alerts}
         </button>
 
@@ -872,12 +1314,12 @@ function App() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '5px',
-            fontSize: '12px',
+            gap: '3px',
+            fontSize: '10px',
             fontWeight: '600'
           }}
         >
-          <span style={{ fontSize: '24px' }}>⚙️</span>
+          <span style={{ fontSize: '20px' }}>⚙️</span>
           {t.settings}
         </button>
       </div>
