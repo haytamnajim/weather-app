@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import './ProWeatherStyles.css'
+import {
+  WiDaySunny, WiNightClear, WiCloud, WiRain, WiDayRain, WiThunderstorm, WiSnow, WiFog,
+  WiSunrise, WiSunset, WiBarometer, WiStrongWind
+} from 'react-icons/wi'
+import { FiSearch, FiMapPin, FiHome, FiStar, FiBarChart2, FiBell, FiSettings, FiDroplet, FiThermometer, FiAlertTriangle, FiCalendar, FiClock, FiGlobe, FiMoon } from 'react-icons/fi'
 
 function App() {
   // États principaux
@@ -350,18 +356,18 @@ function App() {
 
   // Fonctions utilitaires
   const getWeatherIcon = (iconCode) => {
-    const iconMap = {
-      '01d': '☀️', '01n': '🌙',
-      '02d': '🌤️', '02n': '☁️',
-      '03d': '☁️', '03n': '☁️',
-      '04d': '☁️', '04n': '☁️',
-      '09d': '🌧️', '09n': '🌧️',
-      '10d': '🌦️', '10n': '🌧️',
-      '11d': '⛈️', '11n': '⛈️',
-      '13d': '❄️', '13n': '❄️',
-      '50d': '🌫️', '50n': '🌫️'
+    const map = {
+      '01d': <WiDaySunny />, '01n': <WiNightClear />,
+      '02d': <WiDaySunny />, '02n': <WiCloud />,
+      '03d': <WiCloud />, '03n': <WiCloud />,
+      '04d': <WiCloud />, '04n': <WiCloud />,
+      '09d': <WiRain />, '09n': <WiRain />,
+      '10d': <WiDayRain />, '10n': <WiRain />,
+      '11d': <WiThunderstorm />, '11n': <WiThunderstorm />,
+      '13d': <WiSnow />, '13n': <WiSnow />,
+      '50d': <WiFog />, '50n': <WiFog />,
     }
-    return iconMap[iconCode] || '☀️'
+    return map[iconCode] || <WiDaySunny />
   }
 
   const convertTemp = (temp) => {
@@ -490,394 +496,222 @@ function App() {
   }
 
   return (
-    <div style={{
-      height: '100vh',
-      width: '100vw',
-      background: weather ? getBackgroundColor(weather.weather[0].icon, weather.main.temp) : 'linear-gradient(135deg, #2196F3 0%, #64B5F6 100%)',
-      color: darkMode ? '#FFFFFF' : '#FFFFFF',
-      fontFamily: language === 'ar' ? 'Cairo, Tajawal, sans-serif' : 'Poppins, Roboto, sans-serif',
-      display: 'flex',
-      flexDirection: 'column',
-      margin: 0,
-      padding: 0,
-      overflow: 'hidden'
-    }}>
+    <div className={`weather-app ${darkMode ? 'dark-mode' : ''}`}>
 
-      {/* 1. Barre supérieure (Header) */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '15px 20px',
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        backdropFilter: 'blur(10px)'
-      }}>
-        {/* Bouton recherche à gauche */}
-        <button
-          onClick={() => setShowSearch(!showSearch)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'white',
-            fontSize: '24px',
-            cursor: 'pointer',
-            padding: '8px'
-          }}
-        >
-          🔍
-        </button>
-
-        {/* Nom de la ville au centre */}
-        <div style={{ textAlign: 'center' }}>
-          <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
-            {selectedCity}
-          </h2>
-          <small style={{ opacity: 0.8 }}>Maroc</small>
+      {/* Header professionnel */}
+      <header className="weather-header">
+        <div className="weather-header__logo">
+          <WiDaySunny />
+          <span>{t.title}</span>
         </div>
 
-        {/* Bouton géolocalisation à droite */}
-        <button
-          onClick={getCurrentLocation}
-          disabled={loading}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'white',
-            fontSize: '24px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            padding: '8px',
-            opacity: loading ? 0.5 : 1
-          }}
-        >
-          📍
-        </button>
-      </div>
+        <div className="weather-header__location">
+          <div className="weather-header__city">{selectedCity}</div>
+          <div className="weather-header__country">Maroc</div>
+        </div>
 
-      {/* Barre de recherche conditionnelle */}
+        <div className="weather-header__actions">
+          <button
+            className="btn btn-icon"
+            onClick={() => setShowSearch(!showSearch)}
+            title="Rechercher"
+          >
+            <FiSearch />
+          </button>
+          <button
+            className="btn btn-icon"
+            onClick={getCurrentLocation}
+            disabled={loading}
+            title="Ma position"
+          >
+            <FiMapPin />
+          </button>
+        </div>
+      </header>
+
+      {/* Barre de recherche */}
       {showSearch && (
-        <div style={{ padding: '0 20px 15px' }}>
-          <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px' }}>
+        <div className="search-container">
+          <form onSubmit={handleSearch} className="search-form">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t.search}
-              style={{
-                flex: 1,
-                padding: '12px',
-                borderRadius: '25px',
-                border: 'none',
-                fontSize: '16px',
-                backgroundColor: 'rgba(255,255,255,0.9)',
-                color: '#333'
-              }}
+              className="search-input"
               autoFocus
             />
-            <button
-              type="submit"
-              style={{
-                padding: '12px 20px',
-                borderRadius: '25px',
-                border: 'none',
-                backgroundColor: '#2196F3',
-                color: 'white',
-                cursor: 'pointer',
-                fontWeight: '600'
-              }}
-            >
-              OK
+            <button type="submit" className="btn btn-primary">
+              Rechercher
             </button>
           </form>
         </div>
       )}
 
-      {/* Zone de contenu principal */}
-      <div style={{
-        flex: 1,
-        overflowY: 'auto',
-        paddingBottom: '80px'
-      }}>
+      {/* Contenu principal */}
+      <main className="weather-content">
 
         {/* Onglet Accueil */}
         {activeTab === 'home' && (
           <>
-            {/* Messages d'état */}
-            {loading && (
-              <div style={{
-                textAlign: 'center',
-                padding: '50px 20px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '20px'
-              }}>
-                <div style={{ fontSize: '40px' }}>⏳</div>
-                <p>{t.loading || 'Chargement...'}</p>
+          {/* État de chargement */}
+          {loading && (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <div className="loading-text">{t.loading || 'Chargement...'}</div>
               </div>
             )}
 
-            {error && (
-              <div style={{
-                margin: '20px',
-                padding: '15px',
-                backgroundColor: 'rgba(255, 87, 34, 0.9)',
-                borderRadius: '10px',
-                textAlign: 'center'
-              }}>
-                ⚠️ {error}
-              </div>
-            )}
-
-            {/* 2. Bloc météo actuel */}
+            {/* Carte météo principale */}
             {weather && !loading && (
-              <div style={{
-                textAlign: 'center',
-                padding: '30px 20px'
-              }}>
+              <div className="weather-main-card">
                 {/* Icône et température principale */}
-                <div style={{ marginBottom: '30px' }}>
-                  <div style={{
-                    fontSize: '100px',
-                    marginBottom: '10px',
-                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-                  }}>
+                <div>
+                  <div className="weather-icon-main">
                     {getWeatherIcon(weather.weather[0].icon)}
                   </div>
-                  <div style={{
-                    fontSize: '60px',
-                    fontWeight: '300',
-                    marginBottom: '10px'
-                  }}>
+                  <div className="weather-temperature">
                     {convertTemp(weather.main.temp)}°{temperatureUnit}
                   </div>
-                  <p style={{
-                    fontSize: '20px',
-                    textTransform: 'capitalize',
-                    opacity: 0.9,
-                    marginBottom: '20px'
-                  }}>
+                  <div className="weather-description">
                     {weather.weather[0].description}
-                  </p>
+                  </div>
 
                   {/* Alerte chaleur */}
                   {weather.main.temp > 35 && (
-                    <div style={{
-                      backgroundColor: '#FF5722',
-                      padding: '10px 20px',
-                      borderRadius: '20px',
-                      margin: '0 20px',
-                      fontSize: '14px',
-                      fontWeight: '600'
-                    }}>
-                      🔥 Chaleur extrême - Restez hydratés !
+                    <div className="weather-alert">
+                      <FiAlertTriangle style={{ marginRight: 8 }} /> Chaleur extrême - Restez hydratés !
                     </div>
                   )}
                 </div>
 
                 {/* Détails météo en grille */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '15px',
-                  maxWidth: '400px',
-                  margin: '0 auto 30px'
-                }}>
-                  <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    padding: '15px',
-                    borderRadius: '15px',
-                    backdropFilter: 'blur(10px)'
-                  }}>
-                    <div style={{ fontSize: '20px', marginBottom: '5px' }}>🌡️</div>
-                    <div style={{ fontSize: '18px', fontWeight: '600' }}>
+                <div className="weather-details-grid">
+                  <div className="weather-detail-card">
+                    <div className="weather-detail-icon"><FiThermometer /></div>
+                    <div className="weather-detail-value">
                       {convertTemp(weather.main.feels_like)}°{temperatureUnit}
                     </div>
-                    <small>{t.feelsLike}</small>
+                    <div className="weather-detail-label">{t.feelsLike}</div>
                   </div>
 
-                  <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    padding: '15px',
-                    borderRadius: '15px',
-                    backdropFilter: 'blur(10px)'
-                  }}>
-                    <div style={{ fontSize: '20px', marginBottom: '5px' }}>💧</div>
-                    <div style={{ fontSize: '18px', fontWeight: '600' }}>
+                  <div className="weather-detail-card">
+                    <div className="weather-detail-icon"><FiDroplet /></div>
+                    <div className="weather-detail-value">
                       {weather.main.humidity}%
                     </div>
-                    <small>{t.humidity}</small>
+                    <div className="weather-detail-label">{t.humidity}</div>
                   </div>
 
-                  <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    padding: '15px',
-                    borderRadius: '15px',
-                    backdropFilter: 'blur(10px)'
-                  }}>
-                    <div style={{ fontSize: '20px', marginBottom: '5px' }}>💨</div>
-                    <div style={{ fontSize: '18px', fontWeight: '600' }}>
+                  <div className="weather-detail-card">
+                    <div className="weather-detail-icon"><WiStrongWind /></div>
+                    <div className="weather-detail-value">
                       {Math.round(weather.wind.speed * 3.6)} km/h
                     </div>
-                    <small>{t.wind}</small>
+                    <div className="weather-detail-label">{t.wind}</div>
                   </div>
 
-                  <div style={{
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    padding: '15px',
-                    borderRadius: '15px',
-                    backdropFilter: 'blur(10px)'
-                  }}>
-                    <div style={{ fontSize: '20px', marginBottom: '5px' }}>📊</div>
-                    <div style={{ fontSize: '18px', fontWeight: '600' }}>
+                  <div className="weather-detail-card">
+                    <div className="weather-detail-icon"><WiBarometer /></div>
+                    <div className="weather-detail-value">
                       {weather.main.pressure} hPa
                     </div>
-                    <small>{t.pressure}</small>
+                    <div className="weather-detail-label">{t.pressure}</div>
                   </div>
                 </div>
 
                 {/* Lever/Coucher du soleil */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  padding: '20px',
-                  borderRadius: '15px',
-                  margin: '0 20px 20px',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '24px', marginBottom: '5px' }}>🌅</div>
-                    <div style={{ fontWeight: '600' }}>
+                <div className="sun-times">
+                  <div className="sun-time">
+                    <div className="sun-time-icon"><WiSunrise /></div>
+                    <div className="sun-time-value">
                       {new Date(weather.sys.sunrise * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}
                     </div>
-                    <small>Lever du soleil</small>
+                    <div className="sun-time-label">Lever du soleil</div>
                   </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '24px', marginBottom: '5px' }}>🌇</div>
-                    <div style={{ fontWeight: '600' }}>
+                  <div className="sun-time">
+                    <div className="sun-time-icon"><WiSunset /></div>
+                    <div className="sun-time-value">
                       {new Date(weather.sys.sunset * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})}
                     </div>
-                    <small>Coucher du soleil</small>
+                    <div className="sun-time-label">Coucher du soleil</div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* 3. Prévisions prochaines heures */}
+            {/* Prévisions prochaines heures */}
             {forecast && !loading && (
-              <div style={{ padding: '0 20px 30px' }}>
-                <h3 style={{
-                  marginBottom: '15px',
-                  fontSize: '18px',
-                  opacity: 0.9
-                }}>
-                  {t.nextHours}
+              <section className="weather-section">
+                <h3 className="weather-section-title">
+                  <FiClock style={{ marginRight: 8 }} /> {t.nextHours}
                 </h3>
-                <div style={{
-                  display: 'flex',
-                  overflowX: 'auto',
-                  gap: '15px',
-                  paddingBottom: '10px'
-                }}>
+                <div className="hourly-forecast">
                   {forecast.list.slice(0, 8).map((item, index) => (
-                    <div key={index} style={{
-                      minWidth: '80px',
-                      textAlign: 'center',
-                      backgroundColor: 'rgba(255,255,255,0.2)',
-                      padding: '15px 10px',
-                      borderRadius: '15px',
-                      backdropFilter: 'blur(10px)'
-                    }}>
-                      <div style={{ fontSize: '12px', marginBottom: '8px' }}>
+                    <div key={index} className="hourly-item">
+                      <div className="hourly-time">
                         {new Date(item.dt * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit'})}h
                       </div>
-                      <div style={{ fontSize: '30px', marginBottom: '8px' }}>
+                      <div className="hourly-icon">
                         {getWeatherIcon(item.weather[0].icon)}
                       </div>
-                      <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                      <div className="hourly-temp">
                         {convertTemp(item.main.temp)}°
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
 
-            {/* 4. Prévisions des jours à venir */}
+            {/* Prévisions des jours à venir */}
             {forecast && !loading && (
-              <div style={{ padding: '0 20px 30px' }}>
-                <h3 style={{
-                  marginBottom: '15px',
-                  fontSize: '18px',
-                  opacity: 0.9
-                }}>
-                  {t.nextDays}
+              <section className="weather-section">
+                <h3 className="weather-section-title">
+                  <FiCalendar style={{ marginRight: 8 }} /> {t.nextDays}
                 </h3>
-                <div style={{
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  borderRadius: '15px',
-                  padding: '15px',
-                  backdropFilter: 'blur(10px)'
-                }}>
+                <div className="daily-forecast">
                   {forecast.list.filter((_, index) => index % 8 === 0).slice(0, 5).map((item, index) => (
-                    <div key={index} style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: '15px 0',
-                      borderBottom: index < 4 ? '1px solid rgba(255,255,255,0.2)' : 'none'
-                    }}>
-                      <div style={{ fontWeight: '600' }}>
+                    <div key={index} className="daily-item">
+                      <div className="daily-day">
                         {index === 0 ? t.today : new Date(item.dt * 1000).toLocaleDateString(language === 'ar' ? 'ar-MA' : 'fr-FR', {weekday: 'long'})}
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <span style={{ fontSize: '24px' }}>
+                      <div className="daily-weather">
+                        <div className="daily-icon">
                           {getWeatherIcon(item.weather[0].icon)}
-                        </span>
-                        <div style={{ textAlign: 'right' }}>
-                          <span style={{ fontWeight: '600', marginRight: '8px' }}>
-                            {convertTemp(item.main.temp_max)}°
-                          </span>
-                          <span style={{ opacity: 0.7 }}>
-                            {convertTemp(item.main.temp_min)}°
-                          </span>
                         </div>
+                      </div>
+                      <div className="daily-temps">
+                        <span className="daily-temp-max">
+                          {convertTemp(item.main.temp_max)}°
+                        </span>
+                        <span className="daily-temp-min">
+                          {convertTemp(item.main.temp_min)}°
+                        </span>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
 
             {/* Heures de prière (pour le Maroc) */}
             {weather && !loading && (
-              <div style={{ padding: '0 20px 30px' }}>
-                <h3 style={{
-                  marginBottom: '15px',
-                  fontSize: '18px',
-                  opacity: 0.9
-                }}>
-                  🕌 Heures de prière
+              <section className="weather-section">
+                <h3 className="weather-section-title">
+                  <FiClock style={{ marginRight: 8 }} /> Heures de prière
                 </h3>
-                <div style={{
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  borderRadius: '15px',
-                  padding: '15px',
-                  backdropFilter: 'blur(10px)',
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '10px'
-                }}>
+                <div className="prayer-times">
                   {getPrayerTimes(weather) && Object.entries(getPrayerTimes(weather)).map(([prayer, time]) => (
-                    <div key={prayer} style={{ textAlign: 'center', padding: '10px' }}>
-                      <div style={{ fontSize: '14px', opacity: 0.8, marginBottom: '5px' }}>
+                    <div key={prayer} className="prayer-item">
+                      <div className="prayer-name">
                         {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
                       </div>
-                      <div style={{ fontWeight: '600' }}>{time}</div>
+                      <div className="prayer-time">{time}</div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
           </>
         )}
@@ -1199,130 +1033,52 @@ function App() {
             </div>
           </div>
         )}
-      </div>
+      </main>
 
-      {/* 5. Barre inférieure (Bottom Navigation) */}
-      <div style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: '#FFFFFF',
-        borderTop: '1px solid rgba(0,0,0,0.1)',
-        display: 'flex',
-        height: '80px',
-        boxShadow: '0 -2px 10px rgba(0,0,0,0.1)'
-      }}>
-        {/* Bouton Accueil */}
-        <button
-          onClick={() => setActiveTab('home')}
-          style={{
-            flex: 1,
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: activeTab === 'home' ? '#2196F3' : '#666',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            fontSize: '10px',
-            fontWeight: '600'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>🏠</span>
-          {t.home}
-        </button>
+      {/* Navigation inférieure */}
+      <nav className="bottom-nav">
+        <div className="nav-items">
+          <button
+            onClick={() => setActiveTab('home')}
+            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+          >
+            <div className="nav-icon">🏠</div>
+            <div className="nav-label">{t.home}</div>
+          </button>
 
-        {/* Bouton Favoris */}
-        <button
-          onClick={() => setActiveTab('favorites')}
-          style={{
-            flex: 1,
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: activeTab === 'favorites' ? '#2196F3' : '#666',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            fontSize: '10px',
-            fontWeight: '600'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>⭐</span>
-          {t.favorites}
-        </button>
+          <button
+            onClick={() => setActiveTab('favorites')}
+            className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
+          >
+            <div className="nav-icon">⭐</div>
+            <div className="nav-label">{t.favorites}</div>
+          </button>
 
-        {/* Bouton Graphiques */}
-        <button
-          onClick={() => setActiveTab('charts')}
-          style={{
-            flex: 1,
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: activeTab === 'charts' ? '#2196F3' : '#666',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            fontSize: '10px',
-            fontWeight: '600'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>📊</span>
-          {t.charts}
-        </button>
+          <button
+            onClick={() => setActiveTab('charts')}
+            className={`nav-item ${activeTab === 'charts' ? 'active' : ''}`}
+          >
+            <div className="nav-icon">📊</div>
+            <div className="nav-label">{t.charts}</div>
+          </button>
 
-        {/* Bouton Alertes */}
-        <button
-          onClick={() => setActiveTab('alerts')}
-          style={{
-            flex: 1,
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: activeTab === 'alerts' ? '#2196F3' : '#666',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            fontSize: '10px',
-            fontWeight: '600'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>🔔</span>
-          {t.alerts}
-        </button>
+          <button
+            onClick={() => setActiveTab('alerts')}
+            className={`nav-item ${activeTab === 'alerts' ? 'active' : ''}`}
+          >
+            <div className="nav-icon">🔔</div>
+            <div className="nav-label">{t.alerts}</div>
+          </button>
 
-        {/* Bouton Paramètres */}
-        <button
-          onClick={() => setActiveTab('settings')}
-          style={{
-            flex: 1,
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: activeTab === 'settings' ? '#2196F3' : '#666',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '3px',
-            fontSize: '10px',
-            fontWeight: '600'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>⚙️</span>
-          {t.settings}
-        </button>
-      </div>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
+          >
+            <div className="nav-icon">⚙️</div>
+            <div className="nav-label">{t.settings}</div>
+          </button>
+        </div>
+      </nav>
     </div>
   )
 }
