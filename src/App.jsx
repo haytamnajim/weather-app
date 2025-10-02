@@ -1042,7 +1042,7 @@ function App() {
             onClick={() => setActiveTab('home')}
             className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
           >
-            <div className="nav-icon">🏠</div>
+            <div className="nav-icon"><FiHome /></div>
             <div className="nav-label">{t.home}</div>
           </button>
 
@@ -1050,7 +1050,7 @@ function App() {
             onClick={() => setActiveTab('favorites')}
             className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
           >
-            <div className="nav-icon">⭐</div>
+            <div className="nav-icon"><FiStar /></div>
             <div className="nav-label">{t.favorites}</div>
           </button>
 
@@ -1058,7 +1058,7 @@ function App() {
             onClick={() => setActiveTab('charts')}
             className={`nav-item ${activeTab === 'charts' ? 'active' : ''}`}
           >
-            <div className="nav-icon">📊</div>
+            <div className="nav-icon"><FiBarChart2 /></div>
             <div className="nav-label">{t.charts}</div>
           </button>
 
@@ -1066,7 +1066,7 @@ function App() {
             onClick={() => setActiveTab('alerts')}
             className={`nav-item ${activeTab === 'alerts' ? 'active' : ''}`}
           >
-            <div className="nav-icon">🔔</div>
+            <div className="nav-icon"><FiBell /></div>
             <div className="nav-label">{t.alerts}</div>
           </button>
 
@@ -1074,7 +1074,7 @@ function App() {
             onClick={() => setActiveTab('settings')}
             className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`}
           >
-            <div className="nav-icon">⚙️</div>
+            <div className="nav-icon"><FiSettings /></div>
             <div className="nav-label">{t.settings}</div>
           </button>
         </div>
