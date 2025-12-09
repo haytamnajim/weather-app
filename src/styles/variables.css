@@ -1,0 +1,184 @@
+/* ===== DESIGN TOKENS - WEATHER APP ===== */
+
+:root {
+    /* === COLOR SYSTEM === */
+
+    /* Primary Colors - Blue spectrum */
+    --color-primary-50: hsl(220, 100%, 97%);
+    --color-primary-100: hsl(220, 95%, 93%);
+    --color-primary-200: hsl(220, 90%, 85%);
+    --color-primary-300: hsl(220, 85%, 75%);
+    --color-primary-400: hsl(220, 85%, 65%);
+    --color-primary-500: hsl(220, 90%, 56%);
+    --color-primary-600: hsl(220, 95%, 48%);
+    --color-primary-700: hsl(220, 95%, 40%);
+    --color-primary-800: hsl(220, 95%, 32%);
+    --color-primary-900: hsl(220, 95%, 24%);
+
+    /* Accent Colors - Orange/Amber */
+    --color-accent-50: hsl(38, 100%, 97%);
+    --color-accent-100: hsl(38, 95%, 88%);
+    --color-accent-200: hsl(38, 95%, 78%);
+    --color-accent-300: hsl(38, 95%, 68%);
+    --color-accent-400: hsl(38, 95%, 62%);
+    --color-accent-500: hsl(38, 95%, 55%);
+    --color-accent-600: hsl(30, 95%, 50%);
+
+    /* Semantic Colors */
+    --color-success: hsl(145, 85%, 50%);
+    --color-warning: hsl(45, 100%, 55%);
+    --color-error: hsl(350, 90%, 60%);
+    --color-info: hsl(200, 90%, 55%);
+
+    /* Neutral Colors */
+    --color-white: hsl(0, 0%, 100%);
+    --color-black: hsl(0, 0%, 0%);
+    --color-gray-50: hsl(210, 40%, 98%);
+    --color-gray-100: hsl(210, 35%, 96%);
+    --color-gray-200: hsl(210, 30%, 92%);
+    --color-gray-300: hsl(210, 25%, 84%);
+    --color-gray-400: hsl(210, 20%, 70%);
+    --color-gray-500: hsl(210, 15%, 55%);
+    --color-gray-600: hsl(210, 18%, 42%);
+    --color-gray-700: hsl(210, 22%, 30%);
+    --color-gray-800: hsl(210, 25%, 20%);
+    --color-gray-900: hsl(210, 30%, 12%);
+
+    /* === GRADIENTS === */
+    --gradient-primary: linear-gradient(135deg, hsl(220, 95%, 45%) 0%, hsl(220, 85%, 60%) 35%, hsl(190, 95%, 55%) 100%);
+    --gradient-sunset: linear-gradient(135deg, hsl(350, 95%, 65%) 0%, hsl(38, 95%, 62%) 50%, hsl(45, 100%, 65%) 100%);
+    --gradient-sunrise: linear-gradient(135deg, hsl(280, 70%, 60%) 0%, hsl(330, 85%, 70%) 30%, hsl(38, 95%, 62%) 100%);
+    --gradient-night: linear-gradient(135deg, hsl(230, 40%, 15%) 0%, hsl(250, 50%, 25%) 50%, hsl(270, 60%, 35%) 100%);
+    --gradient-rain: linear-gradient(135deg, hsl(210, 50%, 40%) 0%, hsl(200, 70%, 50%) 50%, hsl(190, 80%, 55%) 100%);
+    --gradient-clear: linear-gradient(135deg, hsl(200, 100%, 65%) 0%, hsl(210, 95%, 70%) 50%, hsl(220, 90%, 75%) 100%);
+
+    /* === GLASSMORPHISM === */
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-bg-light: rgba(255, 255, 255, 0.18);
+    --glass-bg-strong: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-border-light: rgba(255, 255, 255, 0.3);
+    --glass-blur: blur(24px);
+    --glass-blur-strong: blur(40px);
+
+    /* === TYPOGRAPHY === */
+    --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Font Sizes - Fluid Scale */
+    --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+    --text-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem);
+    --text-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+    --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --text-xl: clamp(1.15rem, 1.05rem + 0.5vw, 1.25rem);
+    --text-2xl: clamp(1.4rem, 1.2rem + 1vw, 1.5rem);
+    --text-3xl: clamp(1.75rem, 1.5rem + 1.25vw, 1.875rem);
+    --text-4xl: clamp(2rem, 1.5rem + 2.5vw, 2.5rem);
+    --text-5xl: clamp(2.5rem, 2rem + 2.5vw, 3.5rem);
+    --text-6xl: clamp(3rem, 2.5rem + 2.5vw, 4.5rem);
+
+    /* Font Weights */
+    --font-light: 300;
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+    --font-black: 900;
+
+    /* Line Heights */
+    --leading-none: 1;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+
+    /* Letter Spacing */
+    --tracking-tighter: -0.05em;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+
+    /* === SPACING === */
+    --space-1: 0.25rem;
+    /* 4px */
+    --space-2: 0.5rem;
+    /* 8px */
+    --space-3: 0.75rem;
+    /* 12px */
+    --space-4: 1rem;
+    /* 16px */
+    --space-5: 1.25rem;
+    /* 20px */
+    --space-6: 1.5rem;
+    /* 24px */
+    --space-8: 2rem;
+    /* 32px */
+    --space-10: 2.5rem;
+    /* 40px */
+    --space-12: 3rem;
+    /* 48px */
+    --space-16: 4rem;
+    /* 64px */
+    --space-20: 5rem;
+    /* 80px */
+    --space-24: 6rem;
+    /* 96px */
+
+    /* === BORDER RADIUS === */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 2rem;
+    --radius-full: 9999px;
+
+    /* === SHADOWS === */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+    --shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.12), 0 8px 15px rgba(0, 0, 0, 0.08);
+    --shadow-2xl: 0 30px 50px rgba(0, 0, 0, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.25);
+    --shadow-glow-color: 0 0 30px hsla(220, 90%, 56%, 0.3);
+
+    /* === TRANSITIONS === */
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 700ms;
+
+    /* === Z-INDEX === */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+
+    /* === LAYOUT === */
+    --header-height: 72px;
+    --nav-height: 80px;
+    --container-max: 1200px;
+    --content-max: 800px;
+}
+
+/* === DARK THEME OVERRIDES === */
+.dark-mode {
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-bg-light: rgba(0, 0, 0, 0.2);
+    --glass-bg-strong: rgba(0, 0, 0, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-light: rgba(255, 255, 255, 0.15);
+}

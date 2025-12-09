@@ -1,0 +1,280 @@
+/* ===== KEYFRAME ANIMATIONS ===== */
+
+/* Float - gentle up/down motion */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Pulse - breathing effect */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: scale(1.03);
+    }
+}
+
+/* Glow - subtle luminance */
+@keyframes glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
+    }
+}
+
+/* Shimmer - shine across element */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Spin/Rotate */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fade In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide In */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scale */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Gradient Shift - background animation */
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Temperature Glow */
+@keyframes temperatureGlow {
+    0% {
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+    }
+}
+
+/* Ripple effect for buttons */
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Skeleton loading */
+@keyframes skeleton {
+    0% {
+        background-position: -200px 0;
+    }
+
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+/* === ANIMATION UTILITY CLASSES === */
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-glow {
+    animation: glow 3s ease-in-out infinite;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s var(--ease-out);
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s var(--ease-out);
+}
+
+.animate-slide-in-up {
+    animation: slideInUp 0.5s var(--ease-out);
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.3s var(--ease-out);
+}
+
+.animate-bounce-in {
+    animation: bounceIn 0.6s var(--ease-bounce);
+}
+
+/* Staggered delays */
+.delay-100 {
+    animation-delay: 100ms;
+}
+
+.delay-200 {
+    animation-delay: 200ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
+}
+
+.delay-400 {
+    animation-delay: 400ms;
+}
+
+.delay-500 {
+    animation-delay: 500ms;
+}
+
+/* Animation fill modes */
+.fill-forwards {
+    animation-fill-mode: forwards;
+}
+
+.fill-backwards {
+    animation-fill-mode: backwards;
+}
+
+.fill-both {
+    animation-fill-mode: both;
+}
