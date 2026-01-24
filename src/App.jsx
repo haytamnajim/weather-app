@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
-import { FiSearch, FiThermometer, FiDroplet, FiWind, FiSun, FiCloud, FiCloudRain, FiSnowflake } from 'react-icons/fi'
+import {
+  WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
+} from 'react-icons/wi'
+import { FiSearch, FiThermometer, FiDroplet, FiWind, FiSun, FiCloud, FiCloudRain } from 'react-icons/fi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -20,10 +23,6 @@ function App() {
   }, [isDarkMode]);
 
   const API_KEY = '346871855ae2ee3d144f3306bff7579d'
-
-  useEffect(() => {
-    fetchData('Casablanca')
-  }, [])
 
   const fetchData = async (cityName) => {
     if (!cityName) return;
@@ -47,6 +46,10 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    fetchData('Casablanca')
+  }, [])
+
   const handleSearch = (e) => {
     e.preventDefault()
     if (input.trim()) {
@@ -57,7 +60,8 @@ function App() {
 
   const getWeatherIcon = (id, size = "1em") => {
     if (id >= 200 && id < 600) return <FiCloudRain size={size} />;
-    if (id >= 600 && id < 700) return <FiSnowflake size={size} />;
+    if (id >= 600 && id < 700) return <WiSnow size={size} />; // Utilisation de WiSnow qui fonctionne
+    if (id >= 700 && id < 800) return <WiFog size={size} />;
     if (id === 800) return <FiSun size={size} />;
     return <FiCloud size={size} />;
   }
@@ -67,7 +71,6 @@ function App() {
       <div className="header-top">
         <h1>Météo Maroc</h1>
 
-        {/* From Uiverse.io by mobinkakei */}
         <div className="toggleWrapper">
           <input
             className="input"
