@@ -1,41 +1,34 @@
-/* Modern & Fast Weather Styles */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+/* Base Reset */
+* {
+    box-sizing: border-box;
+}
 
 :root {
-    --bg-gradient: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
-    --glass-bg: rgba(255, 255, 255, 0.15);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --text-white: #ffffff;
-    --text-dim: rgba(255, 255, 255, 0.7);
-    --accent: #fcd34d;
-    --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --bg-color: #0ea5e9;
+    --glass: rgba(255, 255, 255, 0.2);
+    --border: rgba(255, 255, 255, 0.3);
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg-gradient);
+    font-family: system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: white;
     min-height: 100vh;
-    color: var(--text-white);
-    -webkit-font-smoothing: antialiased;
 }
 
 .fast-app {
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
     padding: 40px 20px;
 }
 
-header h1 {
-    font-weight: 800;
-    font-size: 2rem;
-    letter-spacing: -0.5px;
-    margin-bottom: 40px;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-/* Uiverse Search Box Styles */
 .search-container {
     display: flex;
     justify-content: center;
@@ -45,43 +38,10 @@ header h1 {
 .searchBox {
     display: flex;
     width: 100%;
-    max-width: 280px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
     background: #2f3640;
     border-radius: 50px;
     position: relative;
-    box-shadow: var(--card-shadow);
-}
-
-.searchButton {
-    color: white;
-    position: absolute;
-    right: 8px;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--gradient-2, linear-gradient(90deg, #2AF598 0%, #009EFD 100%));
-    border: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-.searchButton:hover {
-    color: #fff;
-    background-color: #1A1A1A;
-    box-shadow: rgba(0, 0, 0, 0.5) 0 10px 20px;
-    transform: translateY(-3px);
-}
-
-.searchButton:active {
-    box-shadow: none;
-    transform: translateY(0);
+    padding: 5px;
 }
 
 .searchInput {
@@ -89,11 +49,25 @@ header h1 {
     background: none;
     outline: none;
     color: white;
-    font-size: 15px;
-    padding: 15px 60px 15px 26px;
+    font-size: 16px;
+    padding: 12px 60px 12px 25px;
     width: 100%;
 }
 
+.searchButton {
+    position: absolute;
+    right: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #2AF598 0%, #009EFD 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+}
 
 .main-weather {
     text-align: center;
@@ -101,118 +75,95 @@ header h1 {
 }
 
 .weather-icon-top {
-    font-size: 5rem;
+    font-size: 80px;
     margin-bottom: 10px;
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
 }
 
 .city-name {
-    font-size: 2.2rem;
-    font-weight: 600;
+    font-size: 2rem;
     margin: 0;
 }
 
 .desc {
-    font-size: 1.1rem;
-    color: var(--text-dim);
+    opacity: 0.8;
     text-transform: capitalize;
-    margin: 5px 0 20px 0;
+    margin-bottom: 10px;
 }
 
 .temp-large {
     font-size: 5rem;
-    font-weight: 400;
     margin: 10px 0;
 }
 
 .details {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 30px;
+    gap: 10px;
 }
 
 .detail-item {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    padding: 15px 10px;
-    border-radius: 20px;
-    backdrop-filter: blur(4px);
+    background: var(--glass);
+    padding: 15px 5px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    text-align: center;
 }
 
 .detail-label {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 5px;
+    font-size: 0.7rem;
+    opacity: 0.8;
     display: block;
+    margin-bottom: 5px;
 }
 
 .detail-val {
-    font-size: 1rem;
-    font-weight: 600;
+    font-weight: bold;
 }
 
 .forecast-section {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 25px;
-    backdrop-filter: blur(8px);
+    background: var(--glass);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
 }
 
 .forecast-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0 0 20px 0;
-    opacity: 0.9;
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
 .forecast-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 15px;
 }
 
 .forecast-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.95rem;
-}
-
-.day {
-    font-weight: 400;
-    width: 90px;
-    text-transform: capitalize;
 }
 
 .f-icon {
-    font-size: 1.5rem;
     flex: 1;
     text-align: center;
 }
 
 .f-temp {
-    font-weight: 600;
     width: 50px;
     text-align: right;
+    font-weight: bold;
 }
 
 .error {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    padding: 12px;
-    border-radius: 12px;
+    background: rgba(255, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 10px;
     text-align: center;
     margin-bottom: 20px;
-    font-size: 0.9rem;
 }
 
 .loader {
     text-align: center;
     padding: 20px;
-    font-size: 1.1rem;
-    opacity: 0.8;
 }
