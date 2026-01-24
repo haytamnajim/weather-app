@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
+import WeatherAnimCard from './components/WeatherAnimCard'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
-import { FiSearch, FiThermometer, FiDroplet, FiWind, FiSun, FiCloud, FiCloudRain } from 'react-icons/fi'
+import { FiSearch, FiSun, FiCloud, FiCloudRain } from 'react-icons/fi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -60,7 +61,7 @@ function App() {
 
   const getWeatherIcon = (id, size = "1em") => {
     if (id >= 200 && id < 600) return <FiCloudRain size={size} />;
-    if (id >= 600 && id < 700) return <WiSnow size={size} />; // Utilisation de WiSnow qui fonctionne
+    if (id >= 600 && id < 700) return <WiSnow size={size} />;
     if (id >= 700 && id < 800) return <WiFog size={size} />;
     if (id === 800) return <FiSun size={size} />;
     return <FiCloud size={size} />;
@@ -116,31 +117,7 @@ function App() {
         <div className="loader">Chargement...</div>
       ) : (
         <main className="content">
-          {weather && (
-            <section className="main-weather">
-              <div className="weather-icon-top">
-                {getWeatherIcon(weather.weather[0].id, "100px")}
-              </div>
-              <h2 className="city-name">{weather.name}</h2>
-              <p className="desc">{weather.weather[0].description}</p>
-              <div className="temp-large">{Math.round(weather.main.temp)}°</div>
-
-              <div className="details">
-                <div className="detail-item">
-                  <span className="detail-label"><FiThermometer /> Ressenti</span>
-                  <span className="detail-val">{Math.round(weather.main.feels_like)}°</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label"><FiDroplet /> Humidité</span>
-                  <span className="detail-val">{weather.main.humidity}%</span>
-                </div>
-                <div className="detail-item">
-                  <span className="detail-label"><FiWind /> Vent</span>
-                  <span className="detail-val">{Math.round(weather.wind.speed * 3.6)} km/h</span>
-                </div>
-              </div>
-            </section>
-          )}
+          {weather && <WeatherAnimCard weather={weather} />}
 
           {forecast && (
             <section className="forecast-section">
