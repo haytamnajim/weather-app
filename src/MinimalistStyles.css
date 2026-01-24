@@ -177,115 +177,145 @@ h1 {
     }
 }
 
-/* ANIMATED CARD STYLES - Adapted from Uiverse */
+/* ANIMATED CARD STYLES - Optimized/Fixed */
 .cardm {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 320px;
-    /* Pre-allocate height for expansion */
+    height: 350px;
+    /* Plus d'espace pour l'expansion */
+    margin-top: 20px;
 }
 
 .card {
     position: absolute;
-    width: 250px;
-    height: 130px;
+    width: 260px;
+    height: 140px;
     border-radius: 25px;
     background: whitesmoke;
     color: black;
-    z-index: 2;
-    transition: .4s ease-in-out;
+    z-index: 10;
+    /* Priorité haute */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    top: 0;
-    /* Align top relative to container */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    top: 50px;
+    /* Position initiale stable */
 }
 
+/* Icons */
 .weather-icon-live {
     position: absolute;
-    top: -40px;
+    top: -50px;
     left: 20px;
-    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+    transition: transform 0.4s ease;
+}
+
+.card:hover .weather-icon-live {
+    transform: scale(1.1) rotate(-5deg);
 }
 
 .main {
-    font-size: 2em;
+    font-size: 2.5em;
     font-weight: 800;
-    margin-top: 10px;
-    margin-left: 40px;
+    margin-top: 5px;
+    margin-left: 50px;
 }
 
 .mainsub {
-    font-size: 0.8em;
+    font-size: 0.9em;
     color: #666;
-    margin-left: 40px;
+    margin-left: 50px;
+    font-weight: 600;
 }
 
+/* Expanded Card (Details) */
 .card2 {
     position: absolute;
     display: flex;
-    flex-direction: row;
-    width: 240px;
-    height: 130px;
+    flex-direction: column;
+    /* Vertical layout for easier content flow */
+    width: 250px;
+    height: 140px;
+    /* Hidden initially behind card1 */
     border-radius: 35px;
     background: white;
-    z-index: -1;
-    transition: .4s ease-in-out;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    top: 0;
-    /* Align top */
+    z-index: 5;
+    /* Derrière */
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    top: 50px;
+    /* Same top as card1 */
+    opacity: 0;
+    padding-top: 140px;
+    /* Space for the top card */
+    overflow: hidden;
 }
 
-/* Hover Effects */
+/* Hover Effects - Expansion */
 .card:hover {
-    background-color: #FFE87C;
-    cursor: pointer;
+    background-color: var(--accent);
+    transform: translateY(-20px);
+    /* Lift up slightly */
 }
 
 .card:hover+.card2 {
-    height: 300px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-.upper {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    color: black;
-    width: 100%;
-    justify-content: space-around;
-    top: 140px;
-    /* Push down to reveal on hover */
-    opacity: 0;
-    transition: .4s ease-in-out;
-}
-
-.card:hover+.card2 .upper {
+    height: 320px;
+    /* Expanse vers le bas */
     opacity: 1;
-    top: 140px;
+    top: 50px;
+    /* Fixe */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translateY(-20px);
+    /* Follow the top card */
 }
 
+.upper,
 .lower {
     display: flex;
     flex-direction: row;
-    position: absolute;
-    color: black;
-    width: 100%;
     justify-content: space-around;
-    top: 200px;
+    width: 100%;
+    margin-top: 10px;
     opacity: 0;
-    transition: .4s ease-in-out;
+    transition: opacity 0.3s ease-in-out 0.2s;
+    /* Delay appearance */
 }
 
+.card:hover+.card2 .upper,
 .card:hover+.card2 .lower {
     opacity: 1;
-    top: 200px;
+}
+
+/* Green Bar Styling */
+.card3 {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 45px;
+    background: #22c55e;
+    /* Lime Green Modern */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1rem;
+    border-bottom-left-radius: 25px;
+    /* Match card overflow radius if needed, but here square due to reset */
+    border-bottom-right-radius: 25px;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+}
+
+.card:hover+.card2 .card3 {
+    transform: translateY(0);
 }
 
 /* Metrics Styling */
@@ -300,29 +330,6 @@ h1 {
     font-size: 0.7em;
     font-weight: 600;
     gap: 5px;
-}
-
-.card3 {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 240px;
-    height: 40px;
-    bottom: -40px;
-    /* Hidden initially */
-    border-bottom-left-radius: 35px;
-    border-bottom-right-radius: 35px;
-    background: limegreen;
-    color: white;
-    font-weight: 700;
-    transition: .4s ease-in-out;
-    opacity: 0;
-}
-
-.card:hover+.card2 .card3 {
-    opacity: 1;
-    bottom: 0;
 }
 
 /* SVGs sizing */
