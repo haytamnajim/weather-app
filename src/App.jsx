@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
-import {
-  WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
-} from 'react-icons/wi'
-import { FiSearch, FiThermometer, FiDroplet, FiWind } from 'react-icons/fi'
+import { FiSearch, FiThermometer, FiDroplet, FiWind, FiSun, FiCloud, FiCloudRain, FiSnowflake } from 'react-icons/fi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -12,8 +9,21 @@ function App() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]);
 
   const API_KEY = '346871855ae2ee3d144f3306bff7579d'
+
+  useEffect(() => {
+    fetchData('Casablanca')
+  }, [])
 
   const fetchData = async (cityName) => {
     if (!cityName) return;
@@ -31,16 +41,11 @@ function App() {
       setWeather(wRes.data)
       setForecast(fRes.data)
     } catch (err) {
-      setError('Ville non trouvée au Maroc')
-      console.error(err)
+      setError('Ville non trouvée')
     } finally {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchData('Casablanca')
-  }, [])
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -51,18 +56,41 @@ function App() {
   }
 
   const getWeatherIcon = (id, size = "1em") => {
-    if (id >= 200 && id < 600) return <WiRain size={size} />;
-    if (id >= 600 && id < 700) return <WiSnow size={size} />;
-    if (id >= 700 && id < 800) return <WiFog size={size} />;
-    if (id === 800) return <WiDaySunny size={size} />;
-    return <WiCloud size={size} />;
+    if (id >= 200 && id < 600) return <FiCloudRain size={size} />;
+    if (id >= 600 && id < 700) return <FiSnowflake size={size} />;
+    if (id === 800) return <FiSun size={size} />;
+    return <FiCloud size={size} />;
   }
 
   return (
-    <div className="fast-app">
-      <header>
-        <h1 style={{ color: 'white', textAlign: 'center', fontWeight: '800' }}>Météo Maroc</h1>
-      </header>
+    <div className={`fast-app ${isDarkMode ? 'dark-mode' : ''}`}>
+      <div className="header-top">
+        <h1>Météo Maroc</h1>
+
+        {/* From Uiverse.io by mobinkakei */}
+        <div className="toggleWrapper">
+          <input
+            className="input"
+            id="dn"
+            type="checkbox"
+            checked={isDarkMode}
+            onChange={() => setIsDarkMode(!isDarkMode)}
+          />
+          <label className="toggle" htmlFor="dn">
+            <span className="toggle__handler">
+              <span className="crater crater--1"></span>
+              <span className="crater crater--2"></span>
+              <span className="crater crater--3"></span>
+            </span>
+            <span className="star star--1"></span>
+            <span className="star star--2"></span>
+            <span className="star star--3"></span>
+            <span className="star star--4"></span>
+            <span className="star star--5"></span>
+            <span className="star star--6"></span>
+          </label>
+        </div>
+      </div>
 
       <div className="search-container">
         <form className="searchBox" onSubmit={handleSearch}>
@@ -82,10 +110,10 @@ function App() {
       {error && <div className="error">{error}</div>}
 
       {loading ? (
-        <div className="loader" style={{ textAlign: 'center', color: 'white', padding: '40px' }}>Chargement en cours...</div>
+        <div className="loader">Chargement...</div>
       ) : (
         <main className="content">
-          {weather && weather.weather && (
+          {weather && (
             <section className="main-weather">
               <div className="weather-icon-top">
                 {getWeatherIcon(weather.weather[0].id, "100px")}
@@ -111,7 +139,7 @@ function App() {
             </section>
           )}
 
-          {forecast && forecast.list && (
+          {forecast && (
             <section className="forecast-section">
               <h3 className="forecast-title">Prévisions</h3>
               <div className="forecast-list">
