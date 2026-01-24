@@ -4,6 +4,7 @@ import {
     WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi';
 import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer } from 'react-icons/fi';
+import CardRainEffect from './CardRainEffect';
 
 const WeatherCardGlass = ({ weather }) => {
     if (!weather) return null;
@@ -20,6 +21,7 @@ const WeatherCardGlass = ({ weather }) => {
     return (
         <div className="cardContainer">
             <div className="card">
+                {weather.weather[0].main.toLowerCase().includes('rain') && <CardRainEffect />}
                 <p className="city">{weather.name}, {weather.sys.country}</p>
                 <p className="weather-desc">{weather.weather[0].description}</p>
 
