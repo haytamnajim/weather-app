@@ -45,7 +45,7 @@ function App() {
   return (
     <div className="fast-app">
       <header>
-        <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Fast Weather</h1>
+        <h1 style={{ textAlign: 'center', marginBottom: '30px', fontWeight: '800' }}>Fast Weather</h1>
       </header>
 
       <form className="search-bar" onSubmit={handleSearch}>
@@ -61,7 +61,7 @@ function App() {
       {error && <div className="error">{error}</div>}
 
       {loading ? (
-        <div className="loader">Chargement instantané...</div>
+        <div className="loader">Chargement...</div>
       ) : (
         <>
           {weather && (
@@ -96,7 +96,9 @@ function App() {
                     <span className="day">
                       {new Date(day.dt * 1000).toLocaleDateString('fr-FR', { weekday: 'long' })}
                     </span>
-                    <span className="f-desc">{day.weather[0].description}</span>
+                    <span style={{ flex: 1, textAlign: 'center', fontSize: '0.9em', color: '#64748b' }}>
+                      {day.weather[0].description}
+                    </span>
                     <span className="f-temp">{Math.round(day.main.temp)}°C</span>
                   </div>
                 ))}
