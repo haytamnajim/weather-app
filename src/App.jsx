@@ -6,6 +6,7 @@ import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
 import { FiSearch, FiSun, FiCloud, FiCloudRain } from 'react-icons/fi'
+import RainEffect from './components/RainEffect'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -110,6 +111,8 @@ function App() {
           </button>
         </form>
       </div>
+
+      {weather && weather.weather[0].main.toLowerCase().includes('rain') && <RainEffect />}
 
       {error && <div className="error">{error}</div>}
 

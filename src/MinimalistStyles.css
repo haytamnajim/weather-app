@@ -418,14 +418,37 @@ h1 {
     color: white;
 }
 
-.f-icon {
-    flex: 1;
-    text-align: center;
-    display: flex;
-    justify-content: center;
+.f-temp {
+    font-size: 1.1rem;
+    /* Smaller font */
+    color: white;
 }
 
-color: white;
+/* Rain Animation Styles */
+.rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.drop {
+    position: absolute;
+    bottom: 100%;
+    width: 2px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.4);
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh);
+    }
 }
 
 /* Mobile Optimizations (< 600px) */
@@ -464,10 +487,8 @@ color: white;
     .cardm {
         margin-bottom: 20px;
         height: 150px;
-        /* Collapse height on mobile unless hovered? better keep full size or let it push */
     }
 
-    /* Let hover work on tap for mobile usually */
     .forecast-section {
         padding: 20px;
     }
