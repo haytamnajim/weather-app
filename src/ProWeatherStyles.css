@@ -1381,3 +1381,147 @@ body {
   outline: 2px solid var(--white);
   outline-offset: 2px;
 }
+
+/* ===== NEW PREMIUM WEATHER CARD ===== */
+.cardContainer {
+  width: fit-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  transition: transform var(--transition-normal);
+}
+
+.cardContainer:hover {
+  transform: scale(1.02);
+}
+
+.card {
+  position: relative;
+  width: 280px; 
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  box-shadow: var(--shadow-xl);
+  z-index: 1;
+  overflow: hidden;
+}
+
+.city {
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 1.5px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.weather {
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 1.2px;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: capitalize;
+}
+
+.temp {
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: white;
+  margin: 15px 0;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.minmaxContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
+}
+
+.min,
+.max {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.max {
+  align-items: flex-start;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.min {
+  align-items: flex-end;
+  padding-right: 20px;
+}
+
+.maxHeading,
+.minHeading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.maxTemp,
+.minTemp {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.cardContainer::before {
+  width: 150px;
+  height: 150px;
+  content: "";
+  position: absolute;
+  background-color: var(--accent-amber);
+  background: radial-gradient(circle, var(--accent-orange), var(--accent-amber));
+  z-index: 0;
+  border-radius: 50%;
+  left: -30px;
+  top: -30px;
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: blur(20px);
+  opacity: 0.6;
+}
+
+.cardContainer::after {
+  width: 120px;
+  height: 120px;
+  content: "";
+  position: absolute;
+  background-color: var(--primary-blue-light);
+  z-index: 0;
+  border-radius: 50%;
+  right: -20px;
+  bottom: -20px;
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: blur(20px);
+  opacity: 0.5;
+}
+
+.cardContainer:hover::before {
+  transform: translate(180px, 150px) scale(1.2);
+}
+
+.cardContainer:hover::after {
+  transform: translate(-150px, -150px) scale(1.3);
+}
