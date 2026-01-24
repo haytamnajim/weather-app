@@ -3,7 +3,7 @@ import '../MinimalistStyles.css'; // Ensure styles are available
 import {
     WiDaySunny, WiCloud, WiRain, WiSnow, WiFog, WiDayCloudy
 } from 'react-icons/wi';
-import { FiCloudRain, FiSun, FiCloud, FiSnowflake } from 'react-icons/fi';
+import { FiCloudRain, FiSun, FiCloud } from 'react-icons/fi';
 
 const WeatherAnimCard = ({ weather }) => {
     if (!weather) return null;
