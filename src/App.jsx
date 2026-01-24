@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
 import {
-  WiDaySunny, WiCloud, WiRain, WiSnow, WiFog,
-  WiThermometer, WiDroplet, WiStrongWind
+  WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
-import { FiSearch } from 'react-icons/fi'
+import { FiSearch, FiThermometer, FiDroplet, FiWind } from 'react-icons/fi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -32,7 +31,8 @@ function App() {
       setWeather(wRes.data)
       setForecast(fRes.data)
     } catch (err) {
-      setError('Ville non trouvée')
+      setError('Ville non trouvée au Maroc')
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -61,7 +61,7 @@ function App() {
   return (
     <div className="fast-app">
       <header>
-        <h1 style={{ color: 'white' }}>Météo Maroc</h1>
+        <h1 style={{ color: 'white', textAlign: 'center', fontWeight: '800' }}>Météo Maroc</h1>
       </header>
 
       <div className="search-container">
@@ -71,7 +71,7 @@ function App() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Rechercher une ville..."
+            placeholder="Chercher une ville..."
           />
           <button className="searchButton" type="submit">
             <FiSearch size="20px" />
@@ -82,11 +82,11 @@ function App() {
       {error && <div className="error">{error}</div>}
 
       {loading ? (
-        <div className="loader">Chargement...</div>
+        <div className="loader" style={{ textAlign: 'center', color: 'white', padding: '40px' }}>Chargement en cours...</div>
       ) : (
-        <div className="content">
+        <main className="content">
           {weather && weather.weather && (
-            <div className="main-weather">
+            <section className="main-weather">
               <div className="weather-icon-top">
                 {getWeatherIcon(weather.weather[0].id, "100px")}
               </div>
@@ -96,23 +96,23 @@ function App() {
 
               <div className="details">
                 <div className="detail-item">
-                  <span className="detail-label">Ressenti</span>
+                  <span className="detail-label"><FiThermometer /> Ressenti</span>
                   <span className="detail-val">{Math.round(weather.main.feels_like)}°</span>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-label">Humidité</span>
+                  <span className="detail-label"><FiDroplet /> Humidité</span>
                   <span className="detail-val">{weather.main.humidity}%</span>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-label">Vent</span>
+                  <span className="detail-label"><FiWind /> Vent</span>
                   <span className="detail-val">{Math.round(weather.wind.speed * 3.6)} km/h</span>
                 </div>
               </div>
-            </div>
+            </section>
           )}
 
           {forecast && forecast.list && (
-            <div className="forecast-section">
+            <section className="forecast-section">
               <h3 className="forecast-title">Prévisions</h3>
               <div className="forecast-list">
                 {forecast.list.filter((_, i) => i % 8 === 0).slice(0, 5).map((day, idx) => (
@@ -123,9 +123,9 @@ function App() {
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           )}
-        </div>
+        </main>
       )}
     </div>
   )
