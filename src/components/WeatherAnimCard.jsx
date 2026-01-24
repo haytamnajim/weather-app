@@ -12,7 +12,7 @@ const WeatherAnimCard = ({ weather }) => {
     const getLiveIcon = (id, size = "60px") => {
         // Return React Icon component directly
         if (id >= 200 && id < 600) return <FiCloudRain size={size} color="#5c6a79" />;
-        if (id >= 600 && id < 700) return <FiSnowflake size={size} color="#a0d2eb" />;
+        if (id >= 600 && id < 700) return <WiSnow size={size} color="#a0d2eb" />;
         if (id >= 700 && id < 800) return <WiFog size={size} color="#b0b0b0" />;
         if (id === 800) return <FiSun size={size} color="#fbbf24" />;
         return <FiCloud size={size} color="#9ca3af" />;
