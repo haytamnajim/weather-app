@@ -5,6 +5,7 @@ import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog,
   WiThermometer, WiDroplet, WiStrongWind
 } from 'react-icons/wi'
+import { FiSearch } from 'react-icons/fi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -60,15 +61,20 @@ function App() {
         <h1 style={{ textAlign: 'center' }}>Météo Maroc</h1>
       </header>
 
-      <form className="search-bar" onSubmit={handleSearch}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ex: Casablanca, Rabat, Marrakech..."
-        />
-        <button type="submit">Chercher</button>
-      </form>
+      <div className="search-container">
+        <form className="searchBox" onSubmit={handleSearch}>
+          <input
+            className="searchInput"
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ex: Casablanca..."
+          />
+          <button className="searchButton" type="submit">
+            <FiSearch />
+          </button>
+        </form>
+      </div>
 
       {error && <div className="error">{error}</div>}
 
