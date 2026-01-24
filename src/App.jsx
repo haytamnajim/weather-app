@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
+import {
+  WiDaySunny, WiCloud, WiRain, WiSnow, WiFog,
+  WiThermometer, WiDroplet, WiStrongWind
+} from 'react-icons/wi'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -42,10 +46,18 @@ function App() {
     }
   }
 
+  const getWeatherIcon = (id, size = "1em") => {
+    if (id >= 200 && id < 600) return <WiRain size={size} />;
+    if (id >= 600 && id < 700) return <WiSnow size={size} />;
+    if (id >= 700 && id < 800) return <WiFog size={size} />;
+    if (id === 800) return <WiDaySunny size={size} />;
+    return <WiCloud size={size} />;
+  }
+
   return (
     <div className="fast-app">
       <header>
-        <h1 style={{ textAlign: 'center', marginBottom: '30px', fontWeight: '800' }}>Fast Weather</h1>
+        <h1 style={{ textAlign: 'center' }}>Météo Maroc</h1>
       </header>
 
       <form className="search-bar" onSubmit={handleSearch}>
@@ -53,34 +65,37 @@ function App() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Chercher une ville au Maroc..."
+          placeholder="Ex: Casablanca, Rabat, Marrakech..."
         />
-        <button type="submit">OK</button>
+        <button type="submit">Chercher</button>
       </form>
 
       {error && <div className="error">{error}</div>}
 
       {loading ? (
-        <div className="loader">Chargement...</div>
+        <div className="loader">Mise à jour...</div>
       ) : (
         <>
           {weather && (
             <div className="main-weather">
+              <div className="weather-icon-top">
+                {getWeatherIcon(weather.weather[0].id, "120px")}
+              </div>
               <h2 className="city-name">{weather.name}</h2>
               <p className="desc">{weather.weather[0].description}</p>
-              <div className="temp-large">{Math.round(weather.main.temp)}°C</div>
+              <div className="temp-large">{Math.round(weather.main.temp)}°</div>
 
               <div className="details">
                 <div className="detail-item">
-                  <span className="detail-label">Ressenti</span>
+                  <span className="detail-label"><WiThermometer /> Ressenti</span>
                   <span className="detail-val">{Math.round(weather.main.feels_like)}°</span>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-label">Humidité</span>
+                  <span className="detail-label"><WiDroplet /> Humidité</span>
                   <span className="detail-val">{weather.main.humidity}%</span>
                 </div>
                 <div className="detail-item">
-                  <span className="detail-label">Vent</span>
+                  <span className="detail-label"><WiStrongWind /> Vent</span>
                   <span className="detail-val">{Math.round(weather.wind.speed * 3.6)} km/h</span>
                 </div>
               </div>
@@ -89,17 +104,17 @@ function App() {
 
           {forecast && (
             <div className="forecast-section">
-              <h3 className="forecast-title">Prévisions 5 jours</h3>
+              <h3 className="forecast-title">Prochains jours</h3>
               <div className="forecast-list">
-                {forecast.list.filter((_, i) => i % 8 === 0).slice(0, 5).map((day, idx) => (
+                {forecast.list.filter((_, i) => i % 8 === 0).slice(1, 5).map((day, idx) => (
                   <div key={idx} className="forecast-item">
                     <span className="day">
-                      {new Date(day.dt * 1000).toLocaleDateString('fr-FR', { weekday: 'long' })}
+                      {new Date(day.dt * 1000).toLocaleDateString('fr-FR', { weekday: 'short' })}
                     </span>
-                    <span style={{ flex: 1, textAlign: 'center', fontSize: '0.9em', color: '#64748b' }}>
-                      {day.weather[0].description}
+                    <span className="f-icon">
+                      {getWeatherIcon(day.weather[0].id, "30px")}
                     </span>
-                    <span className="f-temp">{Math.round(day.main.temp)}°C</span>
+                    <span className="f-temp">{Math.round(day.main.temp)}°</span>
                   </div>
                 ))}
               </div>
