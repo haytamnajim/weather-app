@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
-import WeatherAnimCard from './components/WeatherAnimCard'
+import WeatherCardGlass from './components/WeatherCardGlass'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
@@ -117,7 +117,7 @@ function App() {
         <div className="loader">Chargement...</div>
       ) : (
         <main className="content">
-          {weather && <WeatherAnimCard weather={weather} />}
+          {weather && <WeatherCardGlass weather={weather} />}
 
           {forecast && (
             <section className="forecast-section">
