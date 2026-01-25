@@ -5,7 +5,7 @@ import WeatherCardGlass from './components/WeatherCardGlass'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
-import { FiSearch, FiSun, FiCloud, FiCloudRain } from 'react-icons/fi'
+import { FiSearch, FiSun, FiCloud, FiCloudRain, FiShoppingBag, FiMessageCircle, FiSend, FiX } from 'react-icons/fi'
 import RainEffect from './components/RainEffect'
 
 function App() {
@@ -15,6 +15,48 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [clothingAdvice, setClothingAdvice] = useState('')
+  const [loadingAdvice, setLoadingAdvice] = useState(false)
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', content: 'Bonjour ! Je suis votre assistant météo IA. Comment puis-je vous aider ?' }
+  ])
+  const [userMsg, setUserMsg] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
+  const N8N_CHAT_URL = 'https://primary-needlessly-dinosaur.ngrok-free.app/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!userMsg.trim()) return;
+
+    const newMessage = { role: 'user', content: userMsg };
+    setChatMessages([...chatMessages, newMessage]);
+    setUserMsg('');
+    setIsTyping(true);
+
+    try {
+      const response = await axios.post(N8N_CHAT_URL, {
+        message: userMsg,
+        history: chatMessages,
+        weatherContext: weather ? {
+          city: weather.name,
+          temp: weather.main.temp,
+          desc: weather.weather[0].description
+        } : null
+      });
+
+      const aiResponse = response.data.output || response.data.response || response.data;
+      setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+    } catch (err) {
+      console.error("Chat Error:", err);
+      setChatMessages(prev => [...prev, { role: 'assistant', content: "Désolé, j'ai du mal à me connecter à mon cerveau IA." }]);
+    } finally {
+      setIsTyping(false);
+    }
+  }
+
+  const N8N_WEBHOOK_URL = 'https://primary-needlessly-dinosaur.ngrok-free.app/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
 
   useEffect(() => {
     if (isDarkMode) {
@@ -26,10 +68,31 @@ function App() {
 
   const API_KEY = '346871855ae2ee3d144f3306bff7579d'
 
+  const getClothingAdvice = async (weatherData) => {
+    setLoadingAdvice(true);
+    try {
+      const response = await axios.post(N8N_WEBHOOK_URL, {
+        city: weatherData.name,
+        temp: weatherData.main.temp,
+        description: weatherData.weather[0].description,
+        humidity: weatherData.main.humidity,
+        wind: weatherData.wind.speed
+      });
+      // On suppose que n8n renvoie { advice: "..." } ou juste du texte
+      setClothingAdvice(response.data.advice || response.data.output || response.data);
+    } catch (err) {
+      console.error("Erreur conseil IA:", err);
+      setClothingAdvice("Impossible de charger les conseils personnalisés.");
+    } finally {
+      setLoadingAdvice(false);
+    }
+  }
+
   const fetchData = async (cityName) => {
     if (!cityName) return;
     setLoading(true)
     setError('')
+    setClothingAdvice('')
     try {
       const wUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},MA&appid=${API_KEY}&units=metric&lang=fr`;
       const fUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName},MA&appid=${API_KEY}&units=metric&lang=fr`;
@@ -42,6 +105,7 @@ function App() {
 
       setWeather(wRes.data)
       setForecast(fRes.data)
+      getClothingAdvice(wRes.data)
     } catch (err) {
       setError('Ville non trouvée')
     } finally {
@@ -190,7 +254,26 @@ function App() {
         </div>
       ) : (
         <main className="content">
-          {weather && <WeatherCardGlass weather={weather} />}
+          <div className="main-weather-col">
+            {weather && <WeatherCardGlass weather={weather} />}
+
+            {(loadingAdvice || clothingAdvice) && (
+              <div className="advice-card glass">
+                <div className="advice-header">
+                  <FiShoppingBag size="24px" className="advice-icon" />
+                  <h4>Conseil Vestimentaire IA</h4>
+                </div>
+                {loadingAdvice ? (
+                  <div className="advice-loading">
+                    <div className="dot-pulse"></div>
+                    <span>L'IA analyse votre garde-robe...</span>
+                  </div>
+                ) : (
+                  <p className="advice-text">{clothingAdvice}</p>
+                )}
+              </div>
+            )}
+          </div>
 
           {forecast && (() => {
             const dailyData = [];
@@ -248,6 +331,43 @@ function App() {
             );
           })()}
         </main>
+      )}
+      <button
+        className="chat-toggle-btn"
+        onClick={() => setIsChatOpen(!isChatOpen)}
+      >
+        {isChatOpen ? <FiX size="28px" /> : <FiMessageCircle size="28px" />}
+      </button>
+
+      {isChatOpen && (
+        <div className="chat-window glass">
+          <div className="chat-header">
+            <h4>Assistant IA</h4>
+          </div>
+          <div className="chat-messages">
+            {chatMessages.map((msg, i) => (
+              <div key={i} className={`chat-bubble ${msg.role}`}>
+                {msg.content}
+              </div>
+            ))}
+            {isTyping && (
+              <div className="chat-bubble assistant typing">
+                <span>.</span><span>.</span><span>.</span>
+              </div>
+            )}
+          </div>
+          <form className="chat-input-area" onSubmit={handleSendMessage}>
+            <input
+              type="text"
+              placeholder="Posez une question..."
+              value={userMsg}
+              onChange={(e) => setUserMsg(e.target.value)}
+            />
+            <button type="submit">
+              <FiSend size="18px" />
+            </button>
+          </form>
+        </div>
       )}
     </div>
   )
