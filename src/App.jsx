@@ -5,7 +5,7 @@ import WeatherCardGlass from './components/WeatherCardGlass'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
-import { FiSearch, FiSun, FiCloud, FiCloudRain, FiShoppingBag, FiMessageCircle, FiSend, FiX } from 'react-icons/fi'
+import { FiSearch, FiSun, FiCloud, FiCloudRain, FiMessageCircle, FiSend, FiX } from 'react-icons/fi'
 import RainEffect from './components/RainEffect'
 
 function App() {
@@ -15,8 +15,6 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [clothingAdvice, setClothingAdvice] = useState('')
-  const [loadingAdvice, setLoadingAdvice] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [chatMessages, setChatMessages] = useState([
     { role: 'assistant', content: 'Bonjour ! Je suis votre assistant météo IA. Comment puis-je vous aider ?' }
@@ -56,8 +54,6 @@ function App() {
     }
   }
 
-  const N8N_WEBHOOK_URL = 'https://primary-needlessly-dinosaur.ngrok-free.app/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
-
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
@@ -68,31 +64,10 @@ function App() {
 
   const API_KEY = '346871855ae2ee3d144f3306bff7579d'
 
-  const getClothingAdvice = async (weatherData) => {
-    setLoadingAdvice(true);
-    try {
-      const response = await axios.post(N8N_WEBHOOK_URL, {
-        city: weatherData.name,
-        temp: weatherData.main.temp,
-        description: weatherData.weather[0].description,
-        humidity: weatherData.main.humidity,
-        wind: weatherData.wind.speed
-      });
-      // On suppose que n8n renvoie { advice: "..." } ou juste du texte
-      setClothingAdvice(response.data.advice || response.data.output || response.data);
-    } catch (err) {
-      console.error("Erreur conseil IA:", err);
-      setClothingAdvice("Impossible de charger les conseils personnalisés.");
-    } finally {
-      setLoadingAdvice(false);
-    }
-  }
-
   const fetchData = async (cityName) => {
     if (!cityName) return;
     setLoading(true)
     setError('')
-    setClothingAdvice('')
     try {
       const wUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName},MA&appid=${API_KEY}&units=metric&lang=fr`;
       const fUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName},MA&appid=${API_KEY}&units=metric&lang=fr`;
@@ -105,7 +80,6 @@ function App() {
 
       setWeather(wRes.data)
       setForecast(fRes.data)
-      getClothingAdvice(wRes.data)
     } catch (err) {
       setError('Ville non trouvée')
     } finally {
@@ -256,23 +230,6 @@ function App() {
         <main className="content">
           <div className="main-weather-col">
             {weather && <WeatherCardGlass weather={weather} />}
-
-            {(loadingAdvice || clothingAdvice) && (
-              <div className="advice-card glass">
-                <div className="advice-header">
-                  <FiShoppingBag size="24px" className="advice-icon" />
-                  <h4>Conseil Vestimentaire IA</h4>
-                </div>
-                {loadingAdvice ? (
-                  <div className="advice-loading">
-                    <div className="dot-pulse"></div>
-                    <span>L'IA analyse votre garde-robe...</span>
-                  </div>
-                ) : (
-                  <p className="advice-text">{clothingAdvice}</p>
-                )}
-              </div>
-            )}
           </div>
 
           {forecast && (() => {
