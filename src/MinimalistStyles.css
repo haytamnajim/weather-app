@@ -202,6 +202,15 @@ h1 {
     outline: none;
 }
 
+.chat-image {
+    width: 100%;
+    max-width: 280px;
+    border-radius: 15px;
+    margin-top: 10px;
+    display: block;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
 .chat-input-area button {
     background: #0ea5e9;
     border: none;

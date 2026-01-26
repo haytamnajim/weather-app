@@ -51,8 +51,9 @@ function App() {
         }
       });
 
-      let aiResponse = response.data.output || response.data.response || response.data;
-      if (!aiResponse) throw new Error("Réponse vide de l'IA");
+      let aiResponse = response.data.output || response.data.response || response.data.text || response.data;
+      const imageUrl = response.data.imageUrl;
+      if (!aiResponse && !imageUrl) throw new Error("Réponse vide de l'IA");
 
       // Logique d'Action IA : Détection de JSON dans la réponse
       try {
@@ -74,7 +75,7 @@ function App() {
         // Ce n'était pas du JSON valide, on garde la réponse texte normale
       }
 
-      setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
+      setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse, imageUrl: imageUrl }]);
     } catch (err) {
       console.error("Chat Error Detailed:", err);
       const errorText = err.response ? `Erreur ${err.response.status}: Vérifiez que le workflow n8n est ACTIF et configuré sur POST.` : "Impossible de contacter l'IA. Vérifiez votre connexion ou l'URL n8n localhost.";
@@ -372,6 +373,9 @@ function App() {
             {chatMessages.map((msg, i) => (
               <div key={i} className={`chat-bubble ${msg.role}`}>
                 {msg.content}
+                {msg.imageUrl && (
+                  <img src={msg.imageUrl} alt="IA Look" className="chat-image" />
+                )}
               </div>
             ))}
             {isTyping && (
