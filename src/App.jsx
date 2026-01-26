@@ -55,6 +55,11 @@ function App() {
       const imageUrl = response.data.imageUrl;
       if (!aiResponse && !imageUrl) throw new Error("Réponse vide de l'IA");
 
+      // Nettoyage : Si IMAGE_PROMPT est présent, on le retire du texte affiché
+      if (typeof aiResponse === 'string' && aiResponse.includes('IMAGE_PROMPT:')) {
+        aiResponse = aiResponse.split('IMAGE_PROMPT:')[0].trim();
+      }
+
       // Logique d'Action IA : Détection de JSON dans la réponse
       try {
         let cleanResponse = typeof aiResponse === 'string' ? aiResponse.trim() : aiResponse;
