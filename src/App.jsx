@@ -7,6 +7,7 @@ import {
 } from 'react-icons/wi'
 import { FiSearch, FiSun, FiCloud, FiCloudRain, FiMessageCircle, FiSend, FiX } from 'react-icons/fi'
 import RainEffect from './components/RainEffect'
+import { MOROCCAN_CITIES } from './utils/cities'
 
 function App() {
   const [weather, setWeather] = useState(null)
@@ -21,6 +22,8 @@ function App() {
   ])
   const [userMsg, setUserMsg] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
 
   const N8N_CHAT_URL = 'http://localhost:5678/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
 
@@ -103,7 +106,33 @@ function App() {
     if (input.trim()) {
       fetchData(input.trim())
       setInput('')
+      setSuggestions([])
+      setShowSuggestions(false)
     }
+  }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+
+    if (value.length > 1) {
+      const filtered = MOROCCAN_CITIES.filter(city =>
+        city.toLowerCase().startsWith(value.toLowerCase())
+      ).slice(0, 5);
+      setSuggestions(filtered);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }
+
+  const handleSelectSuggestion = (city) => {
+    setInput(city);
+    fetchData(city);
+    setInput('');
+    setSuggestions([]);
+    setShowSuggestions(false);
   }
 
   const getWeatherIcon = (id, size = "1em") => {
@@ -149,12 +178,23 @@ function App() {
             className="searchInput"
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
+            onFocus={() => input.length > 1 && setShowSuggestions(true)}
             placeholder="Chercher une ville..."
           />
           <button className="searchButton" type="submit">
             <FiSearch size="20px" />
           </button>
+
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="suggestions-list glass">
+              {suggestions.map((city, index) => (
+                <li key={index} onClick={() => handleSelectSuggestion(city)}>
+                  {city}
+                </li>
+              ))}
+            </ul>
+          )}
         </form>
       </div>
 
