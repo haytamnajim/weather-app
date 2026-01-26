@@ -51,9 +51,26 @@ function App() {
         }
       });
 
-      let aiResponse = response.data.output || response.data.response || response.data.text || response.data;
-      const imageUrl = response.data.imageUrl;
-      if (!aiResponse && !imageUrl) throw new Error("Réponse vide de l'IA");
+      console.log("N8N Response Data:", response.data);
+
+      let data = Array.isArray(response.data) ? response.data[0] : response.data;
+      let aiResponse = data?.output || data?.response || data?.text || (typeof data === 'string' ? data : null);
+      let imageUrl = data?.imageUrl;
+
+      // Recherche automatique si toujours rien (on ignore les expressions n8n brutes)
+      if (!aiResponse && !imageUrl && typeof data === 'object') {
+        const firstStringKey = Object.keys(data).find(k =>
+          typeof data[k] === 'string' &&
+          data[k].length > 5 &&
+          !data[k].includes('{{')
+        );
+        if (firstStringKey) aiResponse = data[firstStringKey];
+      }
+
+      if (!aiResponse && !imageUrl) {
+        aiResponse = "Erreur de format : n8n a envoyé un objet sans champ 'text' ou 'imageUrl'. Vérifiez votre nœud final.";
+        console.warn("Possible malformed response:", data);
+      }
 
       // Nettoyage : Si IMAGE_PROMPT est présent, on le retire du texte affiché
       if (typeof aiResponse === 'string' && aiResponse.includes('IMAGE_PROMPT:')) {

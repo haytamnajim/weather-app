@@ -33,12 +33,12 @@ const WeatherCardGlass = ({ weather }) => {
 
                 <div className="minmaxContainer">
                     <div className="min">
-                        <p class="minHeading">Min</p>
-                        <p class="minTemp">{Math.round(weather.main.temp_min)}°</p>
+                        <p className="minHeading">Min</p>
+                        <p className="minTemp">{Math.round(weather.main.temp_min)}°</p>
                     </div>
                     <div className="max">
-                        <p class="maxHeading">Max</p>
-                        <p class="maxTemp">{Math.round(weather.main.temp_max)}°</p>
+                        <p className="maxHeading">Max</p>
+                        <p className="maxTemp">{Math.round(weather.main.temp_max)}°</p>
                     </div>
                 </div>
             </div>
