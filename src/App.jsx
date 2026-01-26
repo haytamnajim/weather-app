@@ -22,7 +22,7 @@ function App() {
   const [userMsg, setUserMsg] = useState('')
   const [isTyping, setIsTyping] = useState(false)
 
-  const N8N_CHAT_URL = 'https://primary-needlessly-dinosaur.ngrok-free.app/webhook/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
+  const N8N_CHAT_URL = 'http://localhost:5678/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ function App() {
         } : null
       }, {
         headers: {
-          'ngrok-skip-browser-warning': 'true'
+          // 'ngrok-skip-browser-warning': 'true'
         }
       });
 
@@ -54,7 +54,7 @@ function App() {
       setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
     } catch (err) {
       console.error("Chat Error Detailed:", err);
-      const errorText = err.response ? `Erreur ${err.response.status}: Vérifiez que le workflow n8n est ACTIF et configuré sur POST.` : "Impossible de contacter l'IA. Vérifiez votre connexion ou l'URL ngrok.";
+      const errorText = err.response ? `Erreur ${err.response.status}: Vérifiez que le workflow n8n est ACTIF et configuré sur POST.` : "Impossible de contacter l'IA. Vérifiez votre connexion ou l'URL n8n localhost.";
       setChatMessages(prev => [...prev, { role: 'assistant', content: errorText }]);
     } finally {
       setIsTyping(false);
