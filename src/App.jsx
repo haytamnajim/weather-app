@@ -51,8 +51,28 @@ function App() {
         }
       });
 
-      const aiResponse = response.data.output || response.data.response || response.data;
+      let aiResponse = response.data.output || response.data.response || response.data;
       if (!aiResponse) throw new Error("Réponse vide de l'IA");
+
+      // Logique d'Action IA : Détection de JSON dans la réponse
+      try {
+        let cleanResponse = typeof aiResponse === 'string' ? aiResponse.trim() : aiResponse;
+
+        // Extraction du JSON si entouré de backticks (ex: ```json ... ```)
+        if (typeof cleanResponse === 'string' && cleanResponse.includes('```')) {
+          const match = cleanResponse.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+          if (match) cleanResponse = match[1].trim();
+        }
+
+        const data = typeof cleanResponse === 'object' ? cleanResponse : JSON.parse(cleanResponse);
+
+        if (data && data.action === 'change_city' && data.city) {
+          fetchData(data.city);
+          aiResponse = `D'accord, je change la ville pour ${data.city}. 🌍`;
+        }
+      } catch (e) {
+        // Ce n'était pas du JSON valide, on garde la réponse texte normale
+      }
 
       setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
     } catch (err) {
