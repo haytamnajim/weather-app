@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
 import WeatherCardGlass from './components/WeatherCardGlass'
+import Mannequin3D from './components/Mannequin3D'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
@@ -24,6 +25,8 @@ function App() {
   const [isTyping, setIsTyping] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [currentLookImage, setCurrentLookImage] = useState(null)
+  const [isGeneratingLook, setIsGeneratingLook] = useState(false)
 
   const N8N_CHAT_URL = 'http://localhost:5678/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf'
 
@@ -95,6 +98,12 @@ function App() {
         }
       } catch (e) {
         // Ce n'était pas du JSON valide, on garde la réponse texte normale
+      }
+
+      // Mettre à jour le mannequin si une image est générée
+      if (imageUrl) {
+        setCurrentLookImage(imageUrl);
+        setIsGeneratingLook(false);
       }
 
       setChatMessages(prev => [...prev, { role: 'assistant', content: aiResponse, imageUrl: imageUrl }]);
@@ -318,6 +327,8 @@ function App() {
         </div>
       ) : (
         <main className="content">
+          <Mannequin3D lookImage={currentLookImage} isLoading={isGeneratingLook} />
+
           <div className="main-weather-col">
             {weather && <WeatherCardGlass weather={weather} />}
           </div>

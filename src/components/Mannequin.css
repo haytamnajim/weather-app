@@ -1,0 +1,136 @@
+/* ===== MANNEQUIN 3D STYLES ===== */
+.mannequin-container {
+    position: sticky;
+    top: 20px;
+    width: 100%;
+}
+
+.mannequin-card {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mannequin-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.mannequin-image-wrapper {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    position: relative;
+}
+
+.dark-mode .mannequin-image-wrapper {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.mannequin-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: fadeIn 0.6s ease;
+}
+
+.mannequin-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(100, 116, 139, 0.05);
+}
+
+.mannequin-silhouette {
+    width: 120px;
+    height: 240px;
+    opacity: 0.3;
+    margin-bottom: 20px;
+}
+
+.mannequin-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.mannequin-hint {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    opacity: 0.6;
+    line-height: 1.5;
+}
+
+.mannequin-loading {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(100, 116, 139, 0.05);
+}
+
+.mannequin-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(56, 189, 248, 0.2);
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+.mannequin-loading p {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    opacity: 0.7;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .mannequin-container {
+        position: relative;
+        max-width: 320px;
+        margin: 0 auto 20px;
+    }
+}
