@@ -691,6 +691,37 @@ h1 {
     color: var(--text-primary);
 }
 
+/* Charts Container */
+.charts-container {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 25px;
+}
+
+.chart-wrapper {
+    width: 100%;
+}
+
+.chart-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+@media (max-width: 850px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+}
+
 
 
 .temp-bar-container {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import './MinimalistStyles.css'
 import WeatherCardGlass from './components/WeatherCardGlass'
+import WeatherCharts from './components/WeatherCharts'
 import {
   WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi'
@@ -377,6 +378,8 @@ function App() {
               </section>
             );
           })()}
+
+          {forecast && <WeatherCharts forecast={forecast} isDarkMode={isDarkMode} />}
         </main>
       )}
 
