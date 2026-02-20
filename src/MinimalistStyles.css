@@ -538,6 +538,52 @@ h1 {
     }
 }
 
+/* Advanced Metrics Grid */
+.advanced-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.m-icon {
+    font-size: 1.2rem;
+    color: var(--accent);
+    opacity: 0.9;
+}
+
+.m-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.6;
+    color: var(--text-primary);
+}
+
+.m-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+@media (max-width: 400px) {
+    .advanced-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 /* Metrics Styling */
 .humidity,
 .air,

@@ -3,7 +3,7 @@ import '../MinimalistStyles.css';
 import {
     WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi';
-import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer } from 'react-icons/fi';
+import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer, FiEye, FiTrello } from 'react-icons/fi';
 import CardRainEffect from './CardRainEffect';
 
 const WeatherCardGlass = ({ weather }) => {
@@ -30,6 +30,34 @@ const WeatherCardGlass = ({ weather }) => {
                 </div>
 
                 <p className="temp">{Math.round(weather.main.temp)}°</p>
+
+                <div className="advanced-metrics">
+                    <div className="metric-item">
+                        <FiThermometer className="m-icon" />
+                        <span className="m-label">Ressenti</span>
+                        <span className="m-value">{Math.round(weather.main.feels_like)}°</span>
+                    </div>
+                    <div className="metric-item">
+                        <FiDroplet className="m-icon" />
+                        <span className="m-label">Humidité</span>
+                        <span className="m-value">{weather.main.humidity}%</span>
+                    </div>
+                    <div className="metric-item">
+                        <FiWind className="m-icon" />
+                        <span className="m-label">Vent</span>
+                        <span className="m-value">{Math.round(weather.wind.speed * 3.6)} km/h</span>
+                    </div>
+                    <div className="metric-item">
+                        <FiTrello className="m-icon" />
+                        <span className="m-label">Pression</span>
+                        <span className="m-value description-text">{weather.main.pressure} hPa</span>
+                    </div>
+                    <div className="metric-item">
+                        <FiEye className="m-icon" />
+                        <span className="m-label">Visibilité</span>
+                        <span className="m-value">{(weather.visibility / 1000).toFixed(1)} km</span>
+                    </div>
+                </div>
 
                 <div className="minmaxContainer">
                     <div className="min">
