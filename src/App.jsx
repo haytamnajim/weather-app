@@ -379,6 +379,8 @@ function App() {
           })()}
         </main>
       )}
+
+
       <button
         className="chat-toggle-btn"
         onClick={() => setIsChatOpen(!isChatOpen)}
