@@ -11,7 +11,7 @@
  */
 export function generateMannequinPrompt(clothing, options = {}) {
     const {
-        gender = 'neutral',  // 'neutral', 'male', 'female'
+        _gender = 'neutral',  // 'neutral', 'male', 'female'
         pose = 'T-pose',     // 'T-pose', 'standing', 'walking'
         accessories = [],    // Array d'accessoires: ['umbrella', 'sunglasses', 'hat']
         colorScheme = 'coral pink and brown'  // Couleurs du mannequin

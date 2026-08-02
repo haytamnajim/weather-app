@@ -36,7 +36,7 @@ export function useWeather(initialCity = 'Casablanca', language = 'fr') {
             setWeather(weatherResponse.data);
             setForecast(forecastResponse.data);
             setCity(cityName);
-        } catch (err) {
+        } catch {
             setError('Erreur de connexion');
             setWeather(null);
             setForecast(null);
@@ -62,7 +62,7 @@ export function useWeather(initialCity = 'Casablanca', language = 'fr') {
             setWeather(weatherResponse.data);
             setForecast(forecastResponse.data);
             setCity(weatherResponse.data.name);
-        } catch (err) {
+        } catch {
             setError('Erreur de géolocalisation');
         } finally {
             setLoading(false);
