@@ -236,51 +236,119 @@ h1 {
     }
 }
 
-/* Toggle Uiverse */
-.toggleWrapper {
-    position: relative;
-    overflow: hidden;
-    transform: scale(0.7);
-    width: 90px;
-}
-
-.toggleWrapper .input {
-    position: absolute;
-    left: -99em;
-}
-
-.toggle {
+/* ═══════════════════════════════════════════
+   THEME TOGGLE — Premium Pill Style
+═══════════════════════════════════════════ */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
     cursor: pointer;
-    display: inline-block;
-    position: relative;
-    width: 90px;
-    height: 50px;
-    background-color: #83d8ff;
-    border-radius: 84px;
-    transition: background-color 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    padding: 0;
+    outline: none;
+    flex-shrink: 0;
 }
 
-.toggle__handler {
-    display: inline-block;
+.theme-toggle-track {
+    display: flex;
+    align-items: center;
+    width: 70px;
+    height: 34px;
+    border-radius: 34px;
+    padding: 3px;
     position: relative;
-    z-index: 1;
+    transition: background 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.45s ease;
+}
+
+/* LIGHT mode: track = golden sky gradient */
+.theme-toggle-btn.is-light .theme-toggle-track {
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.45),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+/* DARK mode: track = deep night gradient */
+.theme-toggle-btn.is-dark .theme-toggle-track {
+    background: linear-gradient(135deg, #1e293b, #334155);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* Thumb — the sliding knob */
+.theme-toggle-thumb {
+    position: absolute;
     top: 3px;
-    left: 3px;
-    width: 44px;
-    height: 44px;
-    background-color: #ffcf96;
-    border-radius: 50px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    transition: all 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.45s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                background 0.45s ease,
+                box-shadow 0.45s ease;
 }
 
-.input:checked+.toggle {
-    background-color: #0f172a;
+/* LIGHT: thumb on the left, warm glowing amber */
+.theme-toggle-btn.is-light .theme-toggle-thumb {
+    transform: translateX(0px);
+    background: #fff8e1;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.6),
+                0 0 0 2px rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
 }
 
-.input:checked+.toggle .toggle__handler {
-    background-color: #ffe5b5;
-    transform: translate3d(40px, 0, 0);
+/* DARK: thumb on the right, cool blue-white glow */
+.theme-toggle-btn.is-dark .theme-toggle-thumb {
+    transform: translateX(36px);
+    background: #e0f2fe;
+    box-shadow: 0 2px 10px rgba(56, 189, 248, 0.7),
+                0 0 0 2px rgba(56, 189, 248, 0.25);
+    color: #0ea5e9;
+}
+
+/* The SVG icons inside the thumb */
+.theme-icon {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sun: visible in light mode, hidden in dark mode */
+.sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+.theme-toggle-btn.is-dark .sun-icon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
+
+/* Moon: hidden in light mode, visible in dark mode */
+.moon-icon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+.theme-toggle-btn.is-dark .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Hover effect: gentle lift + pulse */
+.theme-toggle-btn:hover .theme-toggle-track {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+.theme-toggle-btn:hover .theme-toggle-thumb {
+    filter: brightness(1.15);
+}
+
+/* Active press: slight squish */
+.theme-toggle-btn:active .theme-toggle-track {
+    transform: scale(0.97);
 }
 
 /* Search Bar */
