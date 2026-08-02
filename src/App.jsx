@@ -7,6 +7,7 @@ import ForecastSection from './components/ForecastSection';
 import WeatherCardGlass from './components/WeatherCardGlass';
 import WeatherCharts from './components/WeatherCharts';
 import RainEffect from './components/RainEffect';
+import ChatWidget from './components/ChatWidget';
 
 function App() {
   const {
