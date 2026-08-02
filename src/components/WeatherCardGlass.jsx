@@ -26,7 +26,7 @@ const WeatherCardGlass = ({ weather }) => {
                 <p className="weather-desc">{weather.weather[0].description}</p>
 
                 <div className="weather-icon-live" style={{ position: 'relative', top: 'auto', left: 'auto', margin: '10px 0' }}>
-                    {getLiveIcon(weather.weather[0].id, "80px")}
+                    {getLiveIcon(weather.weather[0].id, "60px")}
                 </div>
 
                 <p className="temp">{Math.round(weather.main.temp)}°</p>
