@@ -33,28 +33,32 @@ function App() {
       <div className="header-top">
         <h1>Météo Maroc</h1>
 
-        <div className="toggleWrapper">
-          <input
-            className="input"
-            id="dn"
-            type="checkbox"
-            checked={isDarkMode}
-            onChange={() => setIsDarkMode(!isDarkMode)}
-          />
-          <label className="toggle" htmlFor="dn">
-            <span className="toggle__handler">
-              <span className="crater crater--1"></span>
-              <span className="crater crater--2"></span>
-              <span className="crater crater--3"></span>
+        <button
+          className={`theme-toggle-btn ${isDarkMode ? 'is-dark' : 'is-light'}`}
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          aria-label="Toggle dark mode"
+        >
+          <span className="theme-toggle-track">
+            <span className="theme-toggle-thumb">
+              {/* Sun rays */}
+              <svg className="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" fill="currentColor"/>
+                <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="2" y1="12" x2="5" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="19" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="19.78" y1="4.22" x2="17.66" y2="6.34" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="6.34" y1="17.66" x2="4.22" y2="19.78" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              {/* Moon */}
+              <svg className="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+              </svg>
             </span>
-            <span className="star star--1"></span>
-            <span className="star star--2"></span>
-            <span className="star star--3"></span>
-            <span className="star star--4"></span>
-            <span className="star star--5"></span>
-            <span className="star star--6"></span>
-          </label>
-        </div>
+          </span>
+        </button>
       </div>
 
       <SearchBox onSearch={fetchWeather} />
