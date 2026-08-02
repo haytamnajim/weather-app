@@ -46,7 +46,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     width: 100%;
 }
 
@@ -287,7 +287,7 @@ h1 {
 .search-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     width: 100%;
 }
 
@@ -371,7 +371,7 @@ h1 {
 .content {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 25px;
     width: 100%;
     max-width: 1000px;
     /* Constrain width for better look */
@@ -403,13 +403,13 @@ h1 {
     max-width: 350px;
     /* Slightly reduced width */
     height: auto;
-    min-height: 400px;
+    min-height: 330px;
     /* Reduced from 480px */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px 20px;
+    padding: 20px 15px;
     /* Reduced padding */
     border-radius: 25px;
     /* Slightly smaller radius */
@@ -429,10 +429,10 @@ h1 {
 
 .city {
     font-weight: 800;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     letter-spacing: 1px;
     color: var(--text-primary);
-    margin-bottom: 5px;
+    margin-bottom: 2px;
     text-align: center;
 }
 
@@ -442,7 +442,7 @@ h1 {
     letter-spacing: 1.5px;
     color: var(--text-primary);
     opacity: 0.8;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-transform: uppercase;
     text-align: center;
 }
@@ -470,9 +470,9 @@ h1 {
 }
 
 .temp {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     color: var(--text-primary);
-    margin: 10px 0;
+    margin: 5px 0;
     font-weight: 800;
     line-height: 1;
 }
@@ -482,8 +482,8 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 30px;
-    margin-top: 20px;
-    padding-top: 15px;
+    margin-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid var(--border);
 }
 
@@ -542,10 +542,10 @@ h1 {
 .advanced-metrics {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 10px;
     width: 100%;
-    margin: 20px 0;
-    padding: 15px;
+    margin: 12px 0;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -613,14 +613,14 @@ h1 {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    padding: 25px;
+    padding: 15px 20px;
     /* Reduced padding */
     border-radius: 25px;
     /* Match card radius */
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     height: 100%;
-    min-height: 400px;
+    min-height: 330px;
     /* Match updated card height */
     display: flex;
     flex-direction: column;
@@ -629,7 +629,7 @@ h1 {
 
 .forecast-title {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     font-size: 1.3rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -641,18 +641,18 @@ h1 {
 .forecast-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 .forecast-item {
     display: grid;
     grid-template-columns: 80px 40px 35px 1fr 35px;
     align-items: center;
-    padding: 15px 10px;
+    padding: 8px 6px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: background 0.2s;
     border-radius: 12px;
-    gap: 10px;
+    gap: 8px;
 }
 
 .forecast-item:last-child {
@@ -696,9 +696,9 @@ h1 {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    padding: 30px;
-    margin-top: 30px;
+    gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
     border-radius: 25px;
 }
 
