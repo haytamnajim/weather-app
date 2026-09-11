@@ -1,8 +1,10 @@
 // Weather API data constants and city data
 
-export const API_KEY = '346871855ae2ee3d144f3306bff7579d';
+export const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || '346871855ae2ee3d144f3306bff7579d';
 export const WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 export const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
+
+export const N8N_CHAT_URL = import.meta.env.VITE_N8N_CHAT_URL || 'http://localhost:5678/webhook-test/4579519e-a76f-4d34-8f92-4cf8b33d24bf';
 
 // Moroccan cities
 export const moroccanCities = [

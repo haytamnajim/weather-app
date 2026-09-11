@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { MOROCCAN_CITIES } from '../utils/cities';
 
-const SearchBox = ({ onSearch }) => {
+const SearchBox = React.memo(({ onSearch, placeholder = "Chercher une ville..." }) => {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     const value = e.target.value;
     setInput(value);
 
@@ -21,9 +21,9 @@ const SearchBox = ({ onSearch }) => {
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  };
+  }, []);
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = useCallback((e) => {
     e.preventDefault();
     if (input.trim()) {
       onSearch(input.trim());
@@ -31,14 +31,14 @@ const SearchBox = ({ onSearch }) => {
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  };
+  }, [input, onSearch]);
 
-  const handleSelectSuggestion = (city) => {
+  const handleSelectSuggestion = useCallback((city) => {
     setInput('');
     setSuggestions([]);
     setShowSuggestions(false);
     onSearch(city);
-  };
+  }, [onSearch]);
 
   return (
     <div className="search-container">
@@ -50,7 +50,7 @@ const SearchBox = ({ onSearch }) => {
           onChange={handleInputChange}
           onFocus={() => input.length > 1 && setShowSuggestions(true)}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-          placeholder="Chercher une ville..."
+          placeholder={placeholder}
         />
         <button className="searchButton" type="submit">
           <FiSearch size="20px" />
@@ -68,6 +68,8 @@ const SearchBox = ({ onSearch }) => {
       </form>
     </div>
   );
-};
+});
+
+SearchBox.displayName = 'SearchBox';
 
 export default SearchBox;

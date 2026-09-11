@@ -3,11 +3,15 @@ import '../MinimalistStyles.css';
 import {
     WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi';
-import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer, FiEye, FiTrello } from 'react-icons/fi';
+import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer, FiEye, FiTrello, FiHeart } from 'react-icons/fi';
 import CardRainEffect from './CardRainEffect';
 
-const WeatherCardGlass = ({ weather }) => {
+const WeatherCardGlass = React.memo(({ weather, onToggleFavorite, isFavorite, convertTemp, getUnitSymbol }) => {
     if (!weather) return null;
+
+    const isFav = typeof isFavorite === 'function' ? isFavorite(weather.name) : false;
+    const safeConvertTemp = typeof convertTemp === 'function' ? convertTemp : (temp) => Math.round(temp);
+    const safeGetUnitSymbol = typeof getUnitSymbol === 'function' ? getUnitSymbol : () => '°';
 
     // Function to get the correct icon component based on weather ID
     const getLiveIcon = (id, size = "60px") => {
@@ -20,58 +24,73 @@ const WeatherCardGlass = ({ weather }) => {
 
     return (
         <div className="cardContainer">
-            <div className="card">
+            <article className="card" aria-label={`Weather for ${weather.name}`}>
                 {weather.weather[0].main.toLowerCase().includes('rain') && <CardRainEffect />}
-                <p className="city">{weather.name}, {weather.sys.country}</p>
-                <p className="weather-desc">{weather.weather[0].description}</p>
+                <div className="card-header">
+                    <p className="city">{weather.name}, {weather.sys.country}</p>
+                    <button
+                        className="favorite-toggle-btn"
+                        onClick={onToggleFavorite}
+                        aria-label={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+                        aria-pressed={isFav}
+                    >
+                        <FiHeart
+                            size="20px"
+                            className={isFav ? "favorite-active" : "favorite-inactive"}
+                        />
+                    </button>
+                </div>
+                <p className="weather-desc" aria-label="Weather description">{weather.weather[0].description}</p>
 
-                <div className="weather-icon-live" style={{ position: 'relative', top: 'auto', left: 'auto', margin: '10px 0' }}>
+                <div className="weather-icon-live" style={{ position: 'relative', top: 'auto', left: 'auto', margin: '10px 0' }} aria-hidden="true">
                     {getLiveIcon(weather.weather[0].id, "60px")}
                 </div>
 
-                <p className="temp">{Math.round(weather.main.temp)}°</p>
+                <p className="temp" aria-label={`Temperature: ${safeConvertTemp(weather.main.temp)} ${safeGetUnitSymbol()}`}>{safeConvertTemp(weather.main.temp)}{safeGetUnitSymbol()}</p>
 
-                <div className="advanced-metrics">
-                    <div className="metric-item">
-                        <FiThermometer className="m-icon" />
+                <div className="advanced-metrics" role="list" aria-label="Weather metrics">
+                    <div className="metric-item" role="listitem">
+                        <FiThermometer className="m-icon" aria-hidden="true" />
                         <span className="m-label">Ressenti</span>
-                        <span className="m-value">{Math.round(weather.main.feels_like)}°</span>
+                        <span className="m-value" aria-label={`Feels like: ${safeConvertTemp(weather.main.feels_like)} ${safeGetUnitSymbol()}`}>{safeConvertTemp(weather.main.feels_like)}{safeGetUnitSymbol()}</span>
                     </div>
-                    <div className="metric-item">
-                        <FiDroplet className="m-icon" />
+                    <div className="metric-item" role="listitem">
+                        <FiDroplet className="m-icon" aria-hidden="true" />
                         <span className="m-label">Humidité</span>
-                        <span className="m-value">{weather.main.humidity}%</span>
+                        <span className="m-value" aria-label={`Humidity: ${weather.main.humidity} percent`}>{weather.main.humidity}%</span>
                     </div>
-                    <div className="metric-item">
-                        <FiWind className="m-icon" />
+                    <div className="metric-item" role="listitem">
+                        <FiWind className="m-icon" aria-hidden="true" />
                         <span className="m-label">Vent</span>
-                        <span className="m-value">{Math.round(weather.wind.speed * 3.6)} km/h</span>
+                        <span className="m-value" aria-label={`Wind speed: ${Math.round(weather.wind.speed * 3.6)} kilometers per hour`}>{Math.round(weather.wind.speed * 3.6)} km/h</span>
                     </div>
-                    <div className="metric-item">
-                        <FiTrello className="m-icon" />
+                    <div className="metric-item" role="listitem">
+                        <FiTrello className="m-icon" aria-hidden="true" />
                         <span className="m-label">Pression</span>
-                        <span className="m-value description-text">{weather.main.pressure} hPa</span>
+                        <span className="m-value description-text" aria-label={`Pressure: ${weather.main.pressure} hectopascals`}>{weather.main.pressure} hPa</span>
                     </div>
-                    <div className="metric-item">
-                        <FiEye className="m-icon" />
+                    <div className="metric-item" role="listitem">
+                        <FiEye className="m-icon" aria-hidden="true" />
                         <span className="m-label">Visibilité</span>
-                        <span className="m-value">{(weather.visibility / 1000).toFixed(1)} km</span>
+                        <span className="m-value" aria-label={`Visibility: ${(weather.visibility / 1000).toFixed(1)} kilometers`}>{(weather.visibility / 1000).toFixed(1)} km</span>
                     </div>
                 </div>
 
                 <div className="minmaxContainer">
                     <div className="min">
                         <p className="minHeading">Min</p>
-                        <p className="minTemp">{Math.round(weather.main.temp_min)}°</p>
+                        <p className="minTemp">{safeConvertTemp(weather.main.temp_min)}{safeGetUnitSymbol()}</p>
                     </div>
                     <div className="max">
                         <p className="maxHeading">Max</p>
-                        <p className="maxTemp">{Math.round(weather.main.temp_max)}°</p>
+                        <p className="maxTemp">{safeConvertTemp(weather.main.temp_max)}{safeGetUnitSymbol()}</p>
                     </div>
                 </div>
             </div>
         </div>
     );
-};
+});
+
+WeatherCardGlass.displayName = 'WeatherCardGlass';
 
 export default WeatherCardGlass;

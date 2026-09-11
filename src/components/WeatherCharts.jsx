@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
     AreaChart,
     Area,
@@ -12,15 +12,17 @@ import {
     Cell
 } from 'recharts';
 
-const WeatherCharts = ({ forecast, isDarkMode }) => {
+const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
     if (!forecast) return null;
 
+    const safeConvertTemp = typeof convertTemp === 'function' ? convertTemp : (temp) => Math.round(temp);
+
     // Format data for the next 8 intervals (approx 24 hours)
-    const chartData = forecast.list.slice(0, 8).map(item => ({
+    const chartData = useMemo(() => forecast.list.slice(0, 8).map(item => ({
         time: new Date(item.dt * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
-        temp: Math.round(item.main.temp),
+        temp: safeConvertTemp(item.main.temp),
         humidity: item.main.humidity,
-    }));
+    })), [forecast, safeConvertTemp]);
 
     const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
     const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
@@ -109,6 +111,8 @@ const WeatherCharts = ({ forecast, isDarkMode }) => {
             </div>
         </div>
     );
-};
+});
+
+WeatherCharts.displayName = 'WeatherCharts';
 
 export default WeatherCharts;
