@@ -26,6 +26,9 @@ const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
 
     const textColor = isDarkMode ? '#e2e8f0' : '#1e293b';
     const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const primaryColor = '#6366f1';
+    const secondaryColor = '#8b5cf6';
+    const glassColor = isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
 
     return (
         <div className="charts-container glass">
@@ -35,8 +38,8 @@ const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
                     <AreaChart data={chartData}>
                         <defs>
                             <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.8} />
-                                <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+                                <stop offset="5%" stopColor={primaryColor} stopOpacity={0.8} />
+                                <stop offset="95%" stopColor={primaryColor} stopOpacity={0} />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
@@ -56,7 +59,7 @@ const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
                         />
                         <Tooltip
                             contentStyle={{
-                                backgroundColor: isDarkMode ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                                backgroundColor: glassColor,
                                 border: 'none',
                                 borderRadius: '10px',
                                 color: textColor
@@ -65,7 +68,7 @@ const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
                         <Area
                             type="monotone"
                             dataKey="temp"
-                            stroke="#0ea5e9"
+                            stroke={primaryColor}
                             fillOpacity={1}
                             fill="url(#colorTemp)"
                             strokeWidth={3}
@@ -103,7 +106,7 @@ const WeatherCharts = React.memo(({ forecast, isDarkMode, convertTemp }) => {
                         />
                         <Bar dataKey="humidity" radius={[5, 5, 0, 0]}>
                             {chartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill="#38bdf8" />
+                                <Cell key={`cell-${index}`} fill={secondaryColor} />
                             ))}
                         </Bar>
                     </BarChart>

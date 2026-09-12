@@ -8,6 +8,7 @@ import { useCityHistory } from './hooks/useCityHistory';
 import ErrorBoundary from './components/ErrorBoundary';
 import Loader from './components/Loader';
 import WeatherSkeleton from './components/WeatherSkeleton';
+import WeatherBackground from './components/WeatherBackground';
 import SearchBox from './components/SearchBox';
 import ForecastSection from './components/ForecastSection';
 import WeatherCardGlass from './components/WeatherCardGlass';
@@ -116,6 +117,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <WeatherBackground weather={weather} isDarkMode={isDarkMode} />
       <div className={`fast-app ${isDarkMode ? 'dark-mode' : ''}`}>
         <div className="header-top">
           <h1>{t('title')}</h1>

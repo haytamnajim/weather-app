@@ -3,8 +3,145 @@
     box-sizing: border-box;
 }
 
+/* Base Reset */
+* {
+    box-sizing: border-box;
+}
+
+/* Weather Background Styles */
+.weather-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+    background-size: 200% 200%;
+    animation: gradientShift 20s ease infinite;
+    will-change: background;
+}
+
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    animation: backgroundPulse 10s ease-in-out infinite alternate;
+}
+
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.sun-particle {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 224, 0.6);
+    box-shadow: 0 0 10px rgba(255, 255, 224, 0.8);
+    animation: floatParticle 6s ease-in-out infinite;
+}
+
+.rain-particle {
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, rgba(174, 194, 224, 0.6));
+    animation: rainFall 1s linear infinite;
+}
+
+.snow-particle {
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: snowFall 5s linear infinite;
+}
+
+.cloud-particle {
+    width: 100px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    filter: blur(20px);
+    animation: cloudDrift 10s ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-20px) translateX(10px);
+        opacity: 1;
+    }
+}
+
+@keyframes rainFall {
+    0% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes snowFall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes cloudDrift {
+    0%, 100% {
+        transform: translateX(0);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateX(50px);
+        opacity: 0.5;
+    }
+}
+
 :root {
-    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     --glass: rgba(255, 255, 255, 0.75);
     --border: rgba(255, 255, 255, 0.2);
     --text-primary: #1e293b;
@@ -15,7 +152,6 @@
 }
 
 .dark-mode {
-    --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
     --glass: rgba(0, 0, 0, 0.4);
     --border: rgba(255, 255, 255, 0.15);
     --text-primary: #e2e8f0;
@@ -29,30 +165,12 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg-gradient);
+    background: transparent;
     color: var(--text-primary);
     min-height: 100vh;
     transition: background 0.5s ease;
     overflow-x: hidden;
-    background-size: 200% 200%;
-    animation: gradientShift 15s ease infinite;
     position: relative;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: -1;
-    animation: backgroundPulse 10s ease-in-out infinite alternate;
 }
 
 .fast-app {
@@ -101,9 +219,9 @@ body::before {
 
 .language-toggle-btn:hover {
     transform: scale(1.05);
-    background: var(--accent);
+    background: #6366f1;
     color: white;
-    box-shadow: 0 6px 20px var(--accent-glow);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 .language-text {
@@ -131,9 +249,9 @@ body::before {
 
 .temp-toggle-btn:hover {
     transform: scale(1.05);
-    background: var(--accent);
+    background: #6366f1;
     color: white;
-    box-shadow: 0 6px 20px var(--accent-glow);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 .temp-unit-text {
@@ -144,12 +262,12 @@ h1 {
     margin: 0;
     font-size: 1.8rem;
     font-weight: 900;
-    background: linear-gradient(90deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-secondary) 100%);
+    background: linear-gradient(90deg, var(--text-primary) 0%, #6366f1 50%, #8b5cf6 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 10px var(--accent-glow));
+    filter: drop-shadow(0 2px 10px rgba(99, 102, 241, 0.4));
     animation: shine 4s linear infinite;
     letter-spacing: -0.5px;
     text-transform: uppercase;
@@ -348,6 +466,17 @@ h1 {
     }
 }
 
+@keyframes backgroundPulse {
+    0% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;
@@ -357,17 +486,6 @@ h1 {
     }
     100% {
         background-position: 0% 50%;
-    }
-}
-
-@keyframes backgroundPulse {
-    0% {
-        opacity: 0.5;
-        transform: scale(1);
-    }
-    100% {
-        opacity: 0.8;
-        transform: scale(1.05);
     }
 }
 
@@ -514,9 +632,9 @@ h1 {
 
 .geo-btn:hover {
     transform: scale(1.1);
-    background: var(--accent);
+    background: #6366f1;
     color: white;
-    box-shadow: 0 6px 20px var(--accent-glow);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 .geo-error {
@@ -583,10 +701,10 @@ h1 {
 }
 
 .favorite-btn:hover {
-    background: var(--accent);
+    background: #6366f1;
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px var(--accent-glow);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
 .favorite-icon {
@@ -779,7 +897,7 @@ h1 {
 .suggestions-list li:hover {
     background: rgba(255, 255, 255, 0.15);
     padding-left: 30px;
-    color: var(--accent);
+    color: #6366f1;
 }
 
 .searchInput {
@@ -803,7 +921,7 @@ h1 {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     border: none;
     display: flex;
     align-items: center;
@@ -811,12 +929,12 @@ h1 {
     cursor: pointer;
     color: white;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 15px var(--accent-glow);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
 .searchButton:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px var(--accent-glow);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 /* Main Content Grid - Balanced Dashboard Layout */
@@ -1024,7 +1142,7 @@ h1 {
     height: 150px;
     content: "";
     position: absolute;
-    background: var(--accent);
+    background: #6366f1;
     z-index: -1;
     border-radius: 50%;
     right: -15px;
@@ -1078,7 +1196,7 @@ h1 {
 
 .m-icon {
     font-size: 1.2rem;
-    color: var(--accent);
+    color: #6366f1;
     opacity: 0.9;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: transform 0.3s ease, color 0.3s ease;
@@ -1086,7 +1204,7 @@ h1 {
 
 .metric-item:hover .m-icon {
     transform: scale(1.2);
-    color: var(--accent-secondary);
+    color: #8b5cf6;
 }
 
 .m-label {
@@ -1200,7 +1318,7 @@ h1 {
 .f-icon {
     display: flex;
     justify-content: center;
-    color: var(--accent);
+    color: #6366f1;
 }
 
 .f-temp {
