@@ -61,23 +61,43 @@ function App() {
 
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [geoError, setGeoError] = useState('');
+  const [showGeoError, setShowGeoError] = useState(false);
   const [city, setCity] = useState('Casablanca');
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
+      setShowGeoError(false);
+      setGeoError('');
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           fetchByCoords(latitude, longitude);
           setGeoError('');
+          setShowGeoError(false);
         },
         (error) => {
           console.error('Geolocation error:', error);
-          setGeoError('Impossible d\'obtenir votre position');
+          let errorMessage = '';
+          if (error.code === 1) {
+            errorMessage = language === 'ar' ? 'تم رفض إذن الموقع - يرجى السماح بالوصول للموقع في إعدادات المتصفح' : 'Permission refusée - Activez la localisation dans les paramètres du navigateur';
+          } else if (error.code === 2) {
+            errorMessage = language === 'ar' ? 'تعذر الحصول على الموقع' : 'Impossible d\'obtenir votre position';
+          } else if (error.code === 3) {
+            errorMessage = language === 'ar' ? 'انتهت مهلة طلب الموقع' : 'Délai d\'attente de localisation expiré';
+          } else {
+            errorMessage = language === 'ar' ? 'خطأ في الموقع الجغرافي' : 'Erreur de géolocalisation';
+          }
+          setGeoError(errorMessage);
+          setShowGeoError(true);
+          setTimeout(() => setShowGeoError(false), 8000);
         }
       );
     } else {
-      setGeoError('La géolocalisation n\'est pas supportée par votre navigateur');
+      const noSupportMsg = language === 'ar' ? 'الموقع الجغرافي غير مدعوم في متصفحك' : 'La géolocalisation n\'est pas supportée par votre navigateur';
+      setGeoError(noSupportMsg);
+      setShowGeoError(true);
+      setTimeout(() => setShowGeoError(false), 8000);
     }
   };
 
@@ -100,8 +120,10 @@ function App() {
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-mode');
     } else {
       document.body.classList.remove('dark-mode');
+      document.body.classList.add('light-mode');
     }
   }, [isDarkMode]);
 
@@ -174,7 +196,7 @@ function App() {
 
         <SearchBox onSearch={handleCityChange} placeholder={t('search')} />
 
-        {geoError && <div className="error geo-error">{geoError}</div>}
+        {showGeoError && geoError && <div className="error geo-error">{geoError}</div>}
 
         <Favorites
           favorites={favorites}
