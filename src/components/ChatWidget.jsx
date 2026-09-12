@@ -1,61 +1,119 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FiMessageCircle, FiSend, FiX, FiAlertCircle } from 'react-icons/fi';
-import { N8N_CHAT_URL } from '../utils/constants';
+import { N8N_CHAT_URL, translations } from '../utils/constants';
 
-const ChatWidget = ({ weather, onCityChange }) => {
+const ChatWidget = ({ weather, onCityChange, language = 'fr' }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', content: 'Bonjour ! Je suis votre assistant météo IA. Comment puis-je vous aider ?' }
-  ]);
+  const [isOffline, setIsOffline] = useState(false);
   const [userMsg, setUserMsg] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isOffline, setIsOffline] = useState(false);
+
+  const isRTL = language === 'ar';
+
+  const t = (key) => {
+    return translations[language]?.[key] || translations.fr[key] || key;
+  };
+
+  const getInitialMessage = () => {
+    return isRTL
+      ? 'مرحباً! أنا مساعدك الذكي للطقس. كيف يمكنني مساعدتك؟'
+      : 'Bonjour ! Je suis votre assistant météo IA. Comment puis-je vous aider ?';
+  };
+
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', content: getInitialMessage() }
+  ]);
 
   const getFallbackResponse = (message, weatherContext) => {
     const lowerMessage = message.toLowerCase();
 
+    // Arabic and French keywords
+    const tempKeywords = isRTL
+      ? ['حرارة', 'درجة', 'حار', 'بارد', 'درجة حرارة']
+      : ['température', 'temp', 'chaud', 'froid'];
+
+    const humidityKeywords = isRTL
+      ? ['رطوبة', 'رطب', 'جاف']
+      : ['humidité', 'humide', 'sec'];
+
+    const windKeywords = isRTL
+      ? ['رياح', 'هواء']
+      : ['vent', 'vente'];
+
+    const forecastKeywords = isRTL
+      ? ['توقعات', 'غدا', 'بعد']
+      : ['prévision', 'demain', 'après'];
+
+    const cityKeywords = isRTL
+      ? ['مدينة', 'تغيير', 'طقس']
+      : ['ville', 'changer', 'météo'];
+
     // Simple rule-based fallback
-    if (lowerMessage.includes('température') || lowerMessage.includes('temp') || lowerMessage.includes('chaud') || lowerMessage.includes('froid')) {
+    if (tempKeywords.some(keyword => lowerMessage.includes(keyword))) {
       if (weatherContext) {
-        return `Actuellement, il fait ${Math.round(weatherContext.temp)}°C à ${weatherContext.city} avec ${weatherContext.desc}.`;
+        return isRTL
+          ? `حالياً، درجة الحرارة ${Math.round(weatherContext.temp)}°C في ${weatherContext.city} مع ${weatherContext.desc}.`
+          : `Actuellement, il fait ${Math.round(weatherContext.temp)}°C à ${weatherContext.city} avec ${weatherContext.desc}.`;
       }
-      return "Je peux vous donner les informations de température une fois que vous avez sélectionné une ville.";
+      return isRTL
+        ? "يمكنني إعطائك معلومات درجة الحرارة بمجرد اختيار مدينة."
+        : "Je peux vous donner les informations de température une fois que vous avez sélectionné une ville.";
     }
 
-    if (lowerMessage.includes('humidité') || lowerMessage.includes('humide') || lowerMessage.includes('sec')) {
+    if (humidityKeywords.some(keyword => lowerMessage.includes(keyword))) {
       if (weatherContext) {
-        return "Pour les informations d'humidité détaillées, consultez la section des métriques météo dans l'application.";
+        return isRTL
+          ? "للمعلومات التفصيلية عن الرطوبة، راجع قسم مقاييس الطقس في التطبيق."
+          : "Pour les informations d'humidité détaillées, consultez la section des métriques météo dans l'application.";
       }
-      return "Je peux vous donner les informations d'humidité une fois que vous avez sélectionné une ville.";
+      return isRTL
+        ? "يمكنني إعطائك معلومات الرطوبة بمجرد اختيار مدينة."
+        : "Je peux vous donner les informations d'humidité une fois que vous avez sélectionné une ville.";
     }
 
-    if (lowerMessage.includes('vent') || lowerMessage.includes('vente')) {
+    if (windKeywords.some(keyword => lowerMessage.includes(keyword))) {
       if (weatherContext) {
-        return "Je peux vous donner les informations sur le vent une fois que vous avez sélectionné une ville.";
+        return isRTL
+          ? "يمكنني إعطائك معلومات الرياح بمجرد اختيار مدينة."
+          : "Je peux vous donner les informations sur le vent une fois que vous avez sélectionné une ville.";
       }
-      return "Pour les informations sur le vent, veuillez d'abord sélectionner une ville.";
+      return isRTL
+        ? "للمعلومات عن الرياح، يرجى اختيار مدينة أولاً."
+        : "Pour les informations sur le vent, veuillez d'abord sélectionner une ville.";
     }
 
-    if (lowerMessage.includes('prévision') || lowerMessage.includes('demain') || lowerMessage.includes('après')) {
-      return "Pour les prévisions météo détaillées, consultez la section des prévisions dans l'application.";
+    if (forecastKeywords.some(keyword => lowerMessage.includes(keyword))) {
+      return isRTL
+        ? "للتوقعات التفصيلية، راجع قسم التوقعات في التطبيق."
+        : "Pour les prévisions météo détaillées, consultez la section des prévisions dans l'application.";
     }
 
-    if (lowerMessage.includes('ville') || lowerMessage.includes('changer') || lowerMessage.includes('météo')) {
-      const cityMatches = message.match(/(?:à|de|pour)\s+([a-zA-Z\s]+)/i);
+    if (cityKeywords.some(keyword => lowerMessage.includes(keyword))) {
+      const cityMatches = message.match(/(?:في|من|لـ|à|de|pour)\s+([a-zA-Z\s\u0600-\u06FF]+)/i);
       if (cityMatches && cityMatches[1]) {
         const cityName = cityMatches[1].trim();
-        return `Je vais chercher la météo pour ${cityName}. Veuillez utiliser la barre de recherche pour confirmer.`;
+        return isRTL
+          ? `سأبحث عن طقس ${cityName}. يرجى استخدام شريط البحث للتأكيد.`
+          : `Je vais chercher la météo pour ${cityName}. Veuillez utiliser la barre de recherche pour confirmer.`;
       }
-      return "Pour changer de ville, utilisez la barre de recherche en haut de l'application.";
+      return isRTL
+        ? "لتغيير المدينة، استخدم شريط البحث في أعلى التطبيق."
+        : "Pour changer de ville, utilisez la barre de recherche en haut de l'application.";
     }
 
     // Default fallback responses
-    const defaultResponses = [
-      "Je suis désolé, le service IA n'est pas disponible actuellement. Je peux vous aider avec les informations de base sur la météo actuelle.",
-      "Le service de chat IA est temporairement indisponible. Vous pouvez consulter les informations météo détaillées dans l'application.",
-      "Je fonctionne en mode limité. Posez-moi des questions sur la température, l'humidité ou les prévisions pour l'aide de base."
-    ];
+    const defaultResponses = isRTL
+      ? [
+          "أنا آسف، خدمة الذكاء الاصطناعي غير متاحة حالياً. يمكنني مساعدتك بمعلومات أساسية عن الطقس الحالي.",
+          "خدمة الدردشة غير متاحة مؤقتاً. يمكنك الاطلاع على معلومات الطقس التفصيلية في التطبيق.",
+          "أنا أعمل في وضع محدود. اسألني عن درجة الحرارة أو الرطوبة أو التوقعات للحصول على مساعدة أساسية."
+        ]
+      : [
+          "Je suis désolé, le service IA n'est pas disponible actuellement. Je peux vous aider avec les informations de base sur la météo actuelle.",
+          "Le service de chat IA est temporairement indisponible. Vous pouvez consulter les informations météo détaillées dans l'application.",
+          "Je fonctionne en mode limité. Posez-moi des questions sur la température, l'humidité ou les prévisions pour l'aide de base."
+        ];
 
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
   };
@@ -124,7 +182,9 @@ const ChatWidget = ({ weather, onCityChange }) => {
           if (onCityChange) {
             onCityChange(parsed.city);
           }
-          aiResponse = `D'accord, je change la ville pour ${parsed.city}. 🌍`;
+          aiResponse = isRTL
+            ? `حسناً، سأغير المدينة إلى ${parsed.city}. 🌍`
+            : `D'accord, je change la ville pour ${parsed.city}. 🌍`;
         }
       } catch {
         // Keep normal text response
@@ -162,13 +222,13 @@ const ChatWidget = ({ weather, onCityChange }) => {
       </button>
 
       {isChatOpen && (
-        <div className="chat-window glass">
+        <div className="chat-window glass" dir={isRTL ? 'rtl' : 'ltr'}>
           <div className="chat-header">
-            <h4>Assistant IA</h4>
+            <h4>{t('assistant')}</h4>
             {isOffline && (
               <div className="offline-indicator">
                 <FiAlertCircle size="16px" />
-                <span>Mode hors-ligne</span>
+                <span>{t('offlineMode')}</span>
               </div>
             )}
           </div>
@@ -190,9 +250,10 @@ const ChatWidget = ({ weather, onCityChange }) => {
           <form className="chat-input-area" onSubmit={handleSendMessage}>
             <input
               type="text"
-              placeholder={isOffline ? "Mode limité - posez des questions simples..." : "Posez une question..."}
+              placeholder={isOffline ? t('limitedMode') : t('askQuestion')}
               value={userMsg}
               onChange={(e) => setUserMsg(e.target.value)}
+              dir={isRTL ? 'rtl' : 'ltr'}
             />
             <button type="submit">
               <FiSend size="18px" />

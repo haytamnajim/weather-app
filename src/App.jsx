@@ -194,7 +194,7 @@ function App() {
           </button>
         </div>
 
-        <SearchBox onSearch={handleCityChange} placeholder={t('search')} />
+        <SearchBox onSearch={handleCityChange} placeholder={t('search')} language={language} />
 
         {showGeoError && geoError && <div className="error geo-error">{geoError}</div>}
 
@@ -203,6 +203,7 @@ function App() {
           onSelectFavorite={handleCityChange}
           onRemoveFavorite={removeFavorite}
           isFavorite={isFavorite}
+          language={language}
         />
 
         <CityHistory
@@ -210,6 +211,7 @@ function App() {
           onSelectCity={handleCityChange}
           onRemoveCity={removeFromHistory}
           onClearHistory={clearHistory}
+          language={language}
         />
 
         {weather && weather.weather[0].main.toLowerCase().includes('rain') && <RainEffect />}
@@ -228,6 +230,7 @@ function App() {
                   isFavorite={isFavorite}
                   convertTemp={convertTemp}
                   getUnitSymbol={getUnitSymbol}
+                  language={language}
                 />
               )}
             </div>
@@ -248,7 +251,7 @@ function App() {
           </main>
         )}
 
-        <ChatWidget weather={weather} onCityChange={handleCityChange} />
+        <ChatWidget weather={weather} onCityChange={handleCityChange} language={language} />
       </div>
     </ErrorBoundary>
   );

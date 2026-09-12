@@ -1,9 +1,27 @@
 import React, { useMemo } from 'react';
 import { WiSnow, WiFog } from 'react-icons/wi';
 import { FiCloudRain, FiSun, FiCloud } from 'react-icons/fi';
+import { translations } from '../utils/constants';
 
-const ForecastSection = React.memo(({ forecast, convertTemp, getUnitSymbol }) => {
+const ForecastSection = React.memo(({ forecast, convertTemp, getUnitSymbol, language }) => {
   if (!forecast) return null;
+
+  const isRTL = language === 'ar';
+
+  const t = (key) => {
+    return translations[language]?.[key] || translations.fr[key] || key;
+  };
+
+  // Arabic day names
+  const arabicDays = ['اليوم', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const frenchDays = ["Aujourd'hui", 'Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'];
+
+  const getDayName = (idx) => {
+    if (isRTL) {
+      return arabicDays[idx % arabicDays.length];
+    }
+    return frenchDays[idx % frenchDays.length];
+  };
 
   const getWeatherIcon = (id, size = "1em") => {
     if (id >= 200 && id < 600) return <FiCloudRain size={size} />;
@@ -46,13 +64,13 @@ const ForecastSection = React.memo(({ forecast, convertTemp, getUnitSymbol }) =>
   const { slicedData, globalMin, globalMax, totalRange } = processedData;
 
   return (
-    <section className="forecast-section" aria-label="Weather forecast">
-      <h3 className="forecast-title">Prévisions</h3>
+    <section className={`forecast-section ${isRTL ? 'rtl-forecast' : ''}`} aria-label="Weather forecast" dir={isRTL ? 'rtl' : 'ltr'}>
+      <h3 className="forecast-title">{t('forecast')}</h3>
       <div className="forecast-list" role="list">
         {slicedData.map((day, idx) => {
           const left = ((day.temp_min - globalMin) / totalRange) * 100;
           const width = ((day.temp_max - day.temp_min) / totalRange) * 100;
-          const dayName = idx === 0 ? "Aujourd'hui" : new Date(day.dt * 1000).toLocaleDateString('fr-FR', { weekday: 'short' });
+          const dayName = getDayName(idx);
 
           return (
             <div key={idx} className="forecast-item" role="listitem" aria-label={`${dayName}: Low ${safeConvertTemp(day.temp_min)}${safeGetUnitSymbol()}, High ${safeConvertTemp(day.temp_max)}${safeGetUnitSymbol()}`}>
