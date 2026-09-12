@@ -63,12 +63,13 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
       {/* Floating particles based on weather - optimized for performance */}
       {weatherCondition === 'clear' && (
         <div className="particles-container">
-          {[...Array(10)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <div
               key={i}
               className="particle sun-particle"
               style={{
                 left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 3}s`,
                 animationDuration: `${3 + Math.random() * 2}s`
               }}
@@ -79,7 +80,7 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
 
       {weatherCondition === 'rain' && (
         <div className="particles-container">
-          {[...Array(20)].map((_, i) => (
+          {[...Array(30)].map((_, i) => (
             <div
               key={i}
               className="particle rain-particle"
@@ -95,7 +96,7 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
 
       {weatherCondition === 'snow' && (
         <div className="particles-container">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(25)].map((_, i) => (
             <div
               key={i}
               className="particle snow-particle"
@@ -111,7 +112,7 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
 
       {weatherCondition === 'clouds' && (
         <div className="particles-container">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
               className="particle cloud-particle"
@@ -120,6 +121,24 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
                 top: `${Math.random() * 50}%`,
                 animationDelay: `${Math.random() * 5}s`,
                 animationDuration: `${8 + Math.random() * 4}s`
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Default particles for other conditions */}
+      {!['clear', 'rain', 'snow', 'clouds'].includes(weatherCondition) && (
+        <div className="particles-container">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={i}
+              className="particle sun-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`
               }}
             />
           ))}

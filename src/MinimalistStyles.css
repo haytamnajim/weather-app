@@ -54,44 +54,52 @@
 }
 
 .sun-particle {
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 255, 224, 0.6);
-    box-shadow: 0 0 10px rgba(255, 255, 224, 0.8);
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 224, 0.8);
+    box-shadow: 0 0 15px rgba(255, 255, 224, 1), 0 0 30px rgba(255, 255, 224, 0.5);
     animation: floatParticle 6s ease-in-out infinite;
 }
 
 .rain-particle {
-    width: 2px;
-    height: 20px;
-    background: linear-gradient(to bottom, transparent, rgba(174, 194, 224, 0.6));
+    width: 3px;
+    height: 25px;
+    background: linear-gradient(to bottom, transparent, rgba(174, 194, 224, 0.8));
     animation: rainFall 1s linear infinite;
 }
 
 .snow-particle {
-    width: 6px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
     animation: snowFall 5s linear infinite;
 }
 
 .cloud-particle {
-    width: 100px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.3);
+    width: 150px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.4);
     border-radius: 50px;
-    filter: blur(20px);
+    filter: blur(25px);
     animation: cloudDrift 10s ease-in-out infinite;
 }
 
 @keyframes floatParticle {
     0%, 100% {
-        transform: translateY(0) translateX(0);
-        opacity: 0.6;
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0.8;
+    }
+    25% {
+        transform: translateY(-30px) translateX(15px) scale(1.2);
+        opacity: 1;
     }
     50% {
-        transform: translateY(-20px) translateX(10px);
+        transform: translateY(-10px) translateX(-10px) scale(0.9);
+        opacity: 0.9;
+    }
+    75% {
+        transform: translateY(-40px) translateX(20px) scale(1.1);
         opacity: 1;
     }
 }
@@ -115,29 +123,33 @@
 
 @keyframes snowFall {
     0% {
-        transform: translateY(-100vh) rotate(0deg);
+        transform: translateY(-100vh) rotate(0deg) scale(1);
         opacity: 0;
     }
     10% {
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) scale(1.2);
         opacity: 1;
     }
     90% {
         opacity: 1;
     }
     100% {
-        transform: translateY(100vh) rotate(360deg);
+        transform: translateY(100vh) rotate(360deg) scale(1);
         opacity: 0;
     }
 }
 
 @keyframes cloudDrift {
     0%, 100% {
-        transform: translateX(0);
-        opacity: 0.3;
+        transform: translateX(-100px);
+        opacity: 0.4;
     }
     50% {
-        transform: translateX(50px);
-        opacity: 0.5;
+        transform: translateX(100px);
+        opacity: 0.6;
     }
 }
 
