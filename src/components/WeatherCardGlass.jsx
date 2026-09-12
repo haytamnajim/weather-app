@@ -86,7 +86,7 @@ const WeatherCardGlass = React.memo(({ weather, onToggleFavorite, isFavorite, co
                         <p className="maxTemp">{safeConvertTemp(weather.main.temp_max)}{safeGetUnitSymbol()}</p>
                     </div>
                 </div>
-            </div>
+            </article>
         </div>
     );
 });
