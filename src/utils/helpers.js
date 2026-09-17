@@ -117,3 +117,63 @@ export const getBackgroundColor = (iconCode, temp, darkMode) => {
     if (iconCode?.includes('09') || iconCode?.includes('10')) return 'linear-gradient(135deg, #607D8B 0%, #2196F3 100%)';
     return 'linear-gradient(135deg, #2196F3 0%, #64B5F6 100%)';
 };
+
+// Get wind description based on speed (km/h) - Echelle de Beaufort
+export const getWindDescription = (speedKmh, locale = 'fr') => {
+    const descriptions = {
+        fr: [
+            { max: 1,        label: 'Calme',             icon: '🌫️' },
+            { max: 5,        label: 'Tres legere brise',  icon: '🍃' },
+            { max: 11,       label: 'Legere brise',       icon: '🍃' },
+            { max: 19,       label: 'Petite brise',       icon: '💨' },
+            { max: 28,       label: 'Jolie brise',        icon: '💨' },
+            { max: 38,       label: 'Brise fraiche',      icon: '💨' },
+            { max: 49,       label: 'Brise forte',        icon: '🌬️' },
+            { max: 61,       label: 'Grand frais',        icon: '🌬️' },
+            { max: 74,       label: 'Coup de vent',       icon: '🌪️' },
+            { max: 88,       label: 'Fort coup de vent',  icon: '🌪️' },
+            { max: 102,      label: 'Tempete',            icon: '⛈️' },
+            { max: 117,      label: 'Violente tempete',   icon: '⛈️' },
+            { max: Infinity, label: 'Ouragan',            icon: '🌀' }
+        ],
+        en: [
+            { max: 1,        label: 'Calm',          icon: '🌫️' },
+            { max: 5,        label: 'Light air',     icon: '🍃' },
+            { max: 11,       label: 'Light breeze',  icon: '🍃' },
+            { max: 19,       label: 'Gentle breeze', icon: '💨' },
+            { max: 28,       label: 'Moderate breeze', icon: '💨' },
+            { max: 38,       label: 'Fresh breeze',  icon: '💨' },
+            { max: 49,       label: 'Strong breeze', icon: '🌬️' },
+            { max: 61,       label: 'High wind',     icon: '🌬️' },
+            { max: 74,       label: 'Gale',          icon: '🌪️' },
+            { max: 88,       label: 'Strong gale',   icon: '🌪️' },
+            { max: 102,      label: 'Storm',         icon: '⛈️' },
+            { max: 117,      label: 'Violent storm', icon: '⛈️' },
+            { max: Infinity, label: 'Hurricane',     icon: '🌀' }
+        ]
+    };
+    const list = descriptions[locale] || descriptions.fr;
+    return list.find(d => speedKmh <= d.max) || list[list.length - 1];
+};
+
+// Get UV index description and safety recommendation
+export const getUVIndexDescription = (uvIndex, locale = 'fr') => {
+    const levels = {
+        fr: [
+            { max: 2,        level: 'Faible',     color: '#4CAF50', advice: 'Pas de protection necessaire' },
+            { max: 5,        level: 'Modere',     color: '#FFC107', advice: 'Protection recommandee' },
+            { max: 7,        level: 'Eleve',      color: '#FF9800', advice: 'Protection indispensable' },
+            { max: 10,       level: 'Tres eleve', color: '#F44336', advice: 'Evitez exposition midi' },
+            { max: Infinity, level: 'Extreme',    color: '#9C27B0', advice: 'Restez a l interieur' }
+        ],
+        en: [
+            { max: 2,        level: 'Low',       color: '#4CAF50', advice: 'No protection needed' },
+            { max: 5,        level: 'Moderate',  color: '#FFC107', advice: 'Protection recommended' },
+            { max: 7,        level: 'High',      color: '#FF9800', advice: 'Protection essential' },
+            { max: 10,       level: 'Very high', color: '#F44336', advice: 'Avoid midday exposure' },
+            { max: Infinity, level: 'Extreme',   color: '#9C27B0', advice: 'Stay indoors' }
+        ]
+    };
+    const list = levels[locale] || levels.fr;
+    return list.find(l => uvIndex <= l.max) || list[list.length - 1];
+};
