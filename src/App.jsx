@@ -11,6 +11,7 @@ import WeatherSkeleton from './components/WeatherSkeleton';
 import WeatherBackground from './components/WeatherBackground';
 import SearchBox from './components/SearchBox';
 import ForecastSection from './components/ForecastSection';
+import HourlyTimeline from './components/HourlyTimeline';
 import WeatherCardGlass from './components/WeatherCardGlass';
 import WeatherCharts from './components/WeatherCharts';
 import RainEffect from './components/RainEffect';
@@ -19,6 +20,11 @@ import Favorites from './components/Favorites';
 import CityHistory from './components/CityHistory';
 import LanguageToggle from './components/LanguageToggle';
 import TemperatureToggle from './components/TemperatureToggle';
+import WeatherAlerts from './components/WeatherAlerts';
+import AirQuality from './components/AirQuality';
+import SunMoon from './components/SunMoon';
+import BentoDashboard from './components/BentoDashboard';
+import DashboardNavigation from './components/DashboardNavigation';
 import { FiMapPin, FiHeart } from 'react-icons/fi';
 
 function App() {
@@ -63,6 +69,7 @@ function App() {
   const [geoError, setGeoError] = useState('');
   const [showGeoError, setShowGeoError] = useState(false);
   const [city, setCity] = useState('Casablanca');
+  const [activeTab, setActiveTab] = useState('today');
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
@@ -183,18 +190,19 @@ function App() {
           </div>
         </div>
 
-        <div className="search-actions">
+        <div className="unified-search-island">
           <button
-            className="geo-btn"
+            className="geo-btn-island"
             onClick={handleGeolocation}
             aria-label="Use my location"
             title="Ma position"
           >
-            <FiMapPin size="20px" />
+            <FiMapPin size="18px" />
           </button>
+          <div className="searchbox-wrapper">
+            <SearchBox onSearch={handleCityChange} placeholder={t('search')} language={language} />
+          </div>
         </div>
-
-        <SearchBox onSearch={handleCityChange} placeholder={t('search')} language={language} />
 
         {showGeoError && geoError && <div className="error geo-error">{geoError}</div>}
 
@@ -218,35 +226,85 @@ function App() {
 
         {error && <div className="error">{error}</div>}
 
+        {/* Dashboard Navigation */}
+        <DashboardNavigation
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          language={language}
+        />
+
         {loading ? (
           <WeatherSkeleton />
         ) : (
           <main className="content">
-            <div className="main-weather-col">
-              {weather && (
-                <WeatherCardGlass
-                  weather={weather}
-                  onToggleFavorite={handleToggleFavorite}
-                  isFavorite={isFavorite}
+            {activeTab === 'today' && (
+              <BentoDashboard weather={weather} forecast={forecast} language={language}>
+                {weather && (
+                  <WeatherCardGlass
+                    weather={weather}
+                    onToggleFavorite={handleToggleFavorite}
+                    isFavorite={isFavorite}
+                    convertTemp={convertTemp}
+                    getUnitSymbol={getUnitSymbol}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <SunMoon
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <AirQuality
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <WeatherAlerts
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {forecast && (
+                  <HourlyTimeline
+                    forecast={forecast}
+                    unit={unit}
+                    convertTemp={convertTemp}
+                    language={language}
+                  />
+                )}
+                <ForecastSection
+                  forecast={forecast}
                   convertTemp={convertTemp}
                   getUnitSymbol={getUnitSymbol}
-                  language={language}
                 />
-              )}
-            </div>
+                {forecast && (
+                  <WeatherCharts
+                    forecast={forecast}
+                    isDarkMode={isDarkMode}
+                    convertTemp={convertTemp}
+                  />
+                )}
+              </BentoDashboard>
+            )}
 
-            <ForecastSection
-              forecast={forecast}
-              convertTemp={convertTemp}
-              getUnitSymbol={getUnitSymbol}
-            />
+            {activeTab === 'forecast' && (
+              <div className="forecast-full">
+                <ForecastSection
+                  forecast={forecast}
+                  convertTemp={convertTemp}
+                  getUnitSymbol={getUnitSymbol}
+                />
+              </div>
+            )}
 
-            {forecast && (
-              <WeatherCharts
-                forecast={forecast}
-                isDarkMode={isDarkMode}
-                convertTemp={convertTemp}
-              />
+            {activeTab !== 'today' && activeTab !== 'forecast' && (
+              <div className="coming-soon">
+                <h2>{language === 'ar' ? 'قريباً' : 'Bientôt disponible'}</h2>
+                <p>{language === 'ar' ? 'هذه الميزة قيد التطوير' : 'Cette fonctionnalité est en cours de développement'}</p>
+              </div>
             )}
           </main>
         )}

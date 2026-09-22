@@ -218,8 +218,13 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
         />
       )}
 
-      {/* Overlay for better readability */}
+      {/* Overlay for better readability & Dynamic Aurora Ambient Glow */}
       <div className="background-overlay"></div>
+      <div className="ambient-mesh-glow">
+        <div className={`glow-orb orb-1 ${isNight ? 'orb-night-1' : 'orb-day-1'}`}></div>
+        <div className={`glow-orb orb-2 ${isNight ? 'orb-night-2' : 'orb-day-2'}`}></div>
+        <div className={`glow-orb orb-3 ${isNight ? 'orb-night-3' : 'orb-day-3'}`}></div>
+      </div>
     </div>
   );
 });

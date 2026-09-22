@@ -63,7 +63,13 @@ export const translations = {
     selectCity: 'Sélectionner',
     removeCity: 'Supprimer',
     min: 'Min',
-    max: 'Max'
+    max: 'Max',
+    today: 'Aujourd\'hui',
+    map: 'Carte',
+    alerts: 'Alertes',
+    health: 'Santé',
+    radar: 'Radar',
+    stats: 'Statistiques'
   },
   ar: {
     title: 'طقس المغرب',
@@ -106,6 +112,12 @@ export const translations = {
     selectCity: 'اختيار',
     removeCity: 'حذف',
     min: 'الأدنى',
-    max: 'الأقصى'
+    max: 'الأقصى',
+    today: 'اليوم',
+    map: 'الخريطة',
+    alerts: 'التنبيهات',
+    health: 'الصحة',
+    radar: 'الرادار',
+    stats: 'الإحصائيات'
   }
 };
