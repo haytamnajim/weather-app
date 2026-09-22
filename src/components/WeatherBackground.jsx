@@ -181,8 +181,8 @@ const WeatherBackground = React.memo(({ weather, isDarkMode }) => {
 
   return (
     <div className="weather-background">
-      {/* Cat background image */}
-      <div className="cat-background"></div>
+      {/* Weather background image */}
+      <div className="weather-image-background"></div>
 
       {/* Video background */}
       {videoUrl && (
