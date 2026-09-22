@@ -2017,3 +2017,345 @@ h1 {
     padding-left: 25px;
     padding-right: 30px;
 }
+
+/* ==========================================================================
+   ✨ NOUVELLES AMÉLIORATIONS DESIGN PREMIUM
+   ========================================================================== */
+
+/* 1. Dynamic Ambient Mesh Glow */
+.ambient-mesh-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    animation: floatOrb 18s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+.orb-1 {
+    width: 450px;
+    height: 450px;
+    top: -100px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.7) 0%, rgba(139, 92, 246, 0.2) 70%, transparent 100%);
+    animation-duration: 16s;
+}
+
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    bottom: -120px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.6) 0%, rgba(99, 102, 241, 0.2) 70%, transparent 100%);
+    animation-duration: 22s;
+    animation-delay: -4s;
+}
+
+.orb-3 {
+    width: 350px;
+    height: 350px;
+    top: 35%;
+    left: 55%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.6) 0%, rgba(99, 102, 241, 0.2) 70%, transparent 100%);
+    animation-duration: 20s;
+    animation-delay: -8s;
+}
+
+.orb-night-1 { background: radial-gradient(circle, rgba(67, 56, 202, 0.7) 0%, transparent 80%); }
+.orb-night-2 { background: radial-gradient(circle, rgba(126, 34, 206, 0.5) 0%, transparent 80%); }
+.orb-night-3 { background: radial-gradient(circle, rgba(30, 58, 138, 0.6) 0%, transparent 80%); }
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(60px, 40px) scale(1.12); }
+    100% { transform: translate(-40px, 70px) scale(0.95); }
+}
+
+/* 2. Unified Search Island */
+.unified-search-island {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 600px;
+    margin: 15px auto 25px auto;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark-mode .unified-search-island {
+    background: rgba(15, 23, 42, 0.55);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.unified-search-island:focus-within {
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow: 0 12px 35px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.geo-btn-island {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+}
+
+.geo-btn-island:hover {
+    transform: scale(1.08) rotate(-5deg);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+.geo-btn-island:active {
+    transform: scale(0.95);
+}
+
+.searchbox-wrapper {
+    flex: 1;
+}
+
+.searchbox-wrapper .search-box {
+    margin: 0 !important;
+}
+
+.searchbox-wrapper .search-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 10px !important;
+}
+
+/* 3. Badges Dynamiques Vent (Beaufort) & Indice UV */
+.weather-feature-badges {
+    display: flex;
+    gap: 12px;
+    margin: 15px 0 20px 0;
+    width: 100%;
+}
+
+.feature-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .feature-pill {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.feature-pill:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pill-icon {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pill-content {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.rtl .pill-content {
+    text-align: right;
+}
+
+.pill-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pill-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sub-advice {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    opacity: 0.85;
+}
+
+/* 4. Timeline Heure par Heure (24h) */
+.hourly-timeline-container {
+    margin: 25px 0;
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.dark-mode .hourly-timeline-container {
+    background: rgba(15, 23, 42, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+}
+
+.hourly-timeline-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.hourly-timeline-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.hourly-badge {
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.hourly-scroll-track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Masquer la scrollbar tout en gardant le scroll */
+.hourly-scroll-track::-webkit-scrollbar {
+    height: 4px;
+}
+
+.hourly-scroll-track::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+}
+
+.hourly-card {
+    min-width: 82px;
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
+}
+
+.dark-mode .hourly-card {
+    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.hourly-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hourly-card.is-current {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.25) 100%);
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+}
+
+.hourly-time {
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.hourly-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0;
+}
+
+.hourly-weather-icon {
+    color: #fcd34d;
+    filter: drop-shadow(0 2px 6px rgba(252, 211, 77, 0.4));
+}
+
+.hourly-temp {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.hourly-rain-pop {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #60a5fa;
+}
+
+.hourly-rain-pop.empty {
+    opacity: 0.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .weather-feature-badges {
+        flex-direction: column;
+    }
+    .hourly-card {
+        min-width: 74px;
+        padding: 10px 8px;
+    }
+}

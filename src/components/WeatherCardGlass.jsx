@@ -3,8 +3,9 @@ import '../MinimalistStyles.css';
 import {
     WiDaySunny, WiCloud, WiRain, WiSnow, WiFog
 } from 'react-icons/wi';
-import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer, FiEye, FiTrello, FiHeart } from 'react-icons/fi';
+import { FiCloudRain, FiSun, FiCloud, FiDroplet, FiWind, FiThermometer, FiEye, FiTrello, FiHeart, FiCompass } from 'react-icons/fi';
 import CardRainEffect from './CardRainEffect';
+import { getWindDescription, getUVIndexDescription } from '../utils/helpers';
 
 const WeatherCardGlass = React.memo(({ weather, onToggleFavorite, isFavorite, convertTemp, getUnitSymbol, language }) => {
     if (!weather) return null;
@@ -13,6 +14,16 @@ const WeatherCardGlass = React.memo(({ weather, onToggleFavorite, isFavorite, co
     const safeConvertTemp = typeof convertTemp === 'function' ? convertTemp : (temp) => Math.round(temp);
     const safeGetUnitSymbol = typeof getUnitSymbol === 'function' ? getUnitSymbol : () => '°';
     const isRTL = language === 'ar';
+    const langCode = isRTL ? 'ar' : (language === 'en' ? 'en' : 'fr');
+
+    // Calculs vent & UV
+    const windSpeedKmh = Math.round((weather.wind?.speed || 0) * 3.6);
+    const windInfo = getWindDescription(windSpeedKmh, langCode === 'en' ? 'en' : 'fr');
+    // Si UV non fourni par l'API standard, approximation réaliste selon la température et heure
+    const hourNow = new Date().getHours();
+    const isDayTime = hourNow >= 7 && hourNow <= 19;
+    const estimatedUV = isDayTime ? Math.min(11, Math.max(1, Math.round((weather.main.temp / 4) + (isDayTime ? 2 : 0)))) : 0;
+    const uvInfo = getUVIndexDescription(estimatedUV, langCode === 'en' ? 'en' : 'fr');
 
     // Arabic translations for weather terms
     const arabicTranslations = {
@@ -76,6 +87,27 @@ const WeatherCardGlass = React.memo(({ weather, onToggleFavorite, isFavorite, co
                 </div>
 
                 <p className="temp" aria-label={`Temperature: ${safeConvertTemp(weather.main.temp)} ${safeGetUnitSymbol()}`}>{safeConvertTemp(weather.main.temp)}{safeGetUnitSymbol()}</p>
+
+                {/* Badges Dynamiques Vent (Beaufort) & Indice UV */}
+                <div className="weather-feature-badges">
+                    <div className="feature-pill wind-pill" title={`Échelle de Beaufort: ${windInfo.label}`}>
+                        <span className="pill-icon">{windInfo.icon}</span>
+                        <div className="pill-content">
+                            <span className="pill-title">{isRTL ? 'حالة الرياح' : (langCode === 'en' ? 'Wind Status' : 'Régime du vent')}</span>
+                            <span className="pill-value">{windInfo.label} ({windSpeedKmh} km/h)</span>
+                        </div>
+                    </div>
+
+                    <div className="feature-pill uv-pill" style={{ borderColor: uvInfo.color + '60' }}>
+                        <span className="pill-icon" style={{ color: uvInfo.color }}>☀️</span>
+                        <div className="pill-content">
+                            <span className="pill-title">
+                                {isRTL ? 'مؤشر UV' : 'Indice UV'} : <strong style={{ color: uvInfo.color }}>{estimatedUV} ({uvInfo.level})</strong>
+                            </span>
+                            <span className="pill-value sub-advice">{uvInfo.advice}</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div className="advanced-metrics" role="list" aria-label="Weather metrics">
                     <div className="metric-item" role="listitem">

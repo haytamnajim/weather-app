@@ -11,6 +11,7 @@ import WeatherSkeleton from './components/WeatherSkeleton';
 import WeatherBackground from './components/WeatherBackground';
 import SearchBox from './components/SearchBox';
 import ForecastSection from './components/ForecastSection';
+import HourlyTimeline from './components/HourlyTimeline';
 import WeatherCardGlass from './components/WeatherCardGlass';
 import WeatherCharts from './components/WeatherCharts';
 import RainEffect from './components/RainEffect';
@@ -183,18 +184,19 @@ function App() {
           </div>
         </div>
 
-        <div className="search-actions">
+        <div className="unified-search-island">
           <button
-            className="geo-btn"
+            className="geo-btn-island"
             onClick={handleGeolocation}
             aria-label="Use my location"
             title="Ma position"
           >
-            <FiMapPin size="20px" />
+            <FiMapPin size="18px" />
           </button>
+          <div className="searchbox-wrapper">
+            <SearchBox onSearch={handleCityChange} placeholder={t('search')} language={language} />
+          </div>
         </div>
-
-        <SearchBox onSearch={handleCityChange} placeholder={t('search')} language={language} />
 
         {showGeoError && geoError && <div className="error geo-error">{geoError}</div>}
 
@@ -234,6 +236,16 @@ function App() {
                 />
               )}
             </div>
+
+            {/* Timeline Heure par Heure 24h */}
+            {forecast && (
+              <HourlyTimeline
+                forecast={forecast}
+                unit={unit}
+                convertTemp={convertTemp}
+                language={language}
+              />
+            )}
 
             <ForecastSection
               forecast={forecast}
