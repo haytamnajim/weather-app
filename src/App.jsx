@@ -20,6 +20,9 @@ import Favorites from './components/Favorites';
 import CityHistory from './components/CityHistory';
 import LanguageToggle from './components/LanguageToggle';
 import TemperatureToggle from './components/TemperatureToggle';
+import WeatherAlerts from './components/WeatherAlerts';
+import AirQuality from './components/AirQuality';
+import SunMoon from './components/SunMoon';
 import { FiMapPin, FiHeart } from 'react-icons/fi';
 
 function App() {
@@ -236,6 +239,30 @@ function App() {
                 />
               )}
             </div>
+
+            {/* Alertes Météo */}
+            {weather && (
+              <WeatherAlerts
+                weather={weather}
+                language={language}
+              />
+            )}
+
+            {/* Qualité de l'Air */}
+            {weather && (
+              <AirQuality
+                weather={weather}
+                language={language}
+              />
+            )}
+
+            {/* Soleil & Lune */}
+            {weather && (
+              <SunMoon
+                weather={weather}
+                language={language}
+              />
+            )}
 
             {/* Timeline Heure par Heure 24h */}
             {forecast && (
