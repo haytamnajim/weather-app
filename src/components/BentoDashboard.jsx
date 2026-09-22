@@ -11,19 +11,22 @@ const BentoDashboard = React.memo(({ weather, forecast, children, language = 'fr
           {children[0]}
         </div>
 
-        {/* Sun/Moon - Medium */}
-        <div className="bento-item bento-medium">
-          {children[1]}
-        </div>
+        {/* Right column with smaller cards */}
+        <div className="bento-right-column">
+          {/* Sun/Moon - Medium */}
+          <div className="bento-item bento-medium">
+            {children[1]}
+          </div>
 
-        {/* Air Quality - Medium */}
-        <div className="bento-item bento-medium">
-          {children[2]}
-        </div>
+          {/* Air Quality - Medium */}
+          <div className="bento-item bento-medium">
+            {children[2]}
+          </div>
 
-        {/* Alerts - Medium */}
-        <div className="bento-item bento-medium">
-          {children[3]}
+          {/* Alerts - Medium */}
+          <div className="bento-item bento-medium">
+            {children[3]}
+          </div>
         </div>
 
         {/* Hourly Timeline - Wide */}

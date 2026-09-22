@@ -19,6 +19,22 @@
     overflow: hidden;
 }
 
+/* Cat Background Image */
+.cat-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-image: url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    filter: blur(2px);
+}
+
 .weather-video {
     position: absolute;
     top: 50%;
@@ -1979,72 +1995,69 @@ h1 {
 
 .bento-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 15px;
   padding: 10px 0;
+}
+
+@media (min-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+  }
+  
+  .bento-large {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  
+  .bento-right-column {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  
+  .bento-wide {
+    grid-column: 1 / span 2;
+  }
 }
 
 .bento-item {
   background: var(--card-bg);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
-  border-radius: 25px;
+  border-radius: 20px;
   border: 1px solid var(--border);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15),
               0 0 20px var(--accent-glow),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  padding: 20px;
+  padding: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 
 .bento-item:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
               0 0 30px var(--accent-glow);
 }
 
 .bento-large {
-  grid-column: span 12;
-  min-height: 400px;
+  min-height: 350px;
 }
 
 .bento-medium {
-  grid-column: span 6;
-  min-height: 200px;
+  min-height: 180px;
 }
 
 .bento-wide {
-  grid-column: span 12;
-  min-height: 250px;
+  min-height: 220px;
 }
 
-@media (min-width: 768px) {
-  .bento-large {
-    grid-column: span 8;
-  }
-
-  .bento-medium {
-    grid-column: span 4;
-  }
-
-  .bento-wide {
-    grid-column: span 12;
-  }
-}
-
-@media (min-width: 1024px) {
-  .bento-large {
-    grid-column: span 6;
-  }
-
-  .bento-medium {
-    grid-column: span 3;
-  }
-
-  .bento-wide {
-    grid-column: span 6;
-  }
+.bento-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 /* Dashboard Navigation Styles */
