@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BentoDashboard = React.memo({ weather, forecast, children, language = 'fr' }) => {
+const BentoDashboard = React.memo(({ weather, forecast, children, language = 'fr' }) => {
   const isRTL = language === 'ar';
 
   return (

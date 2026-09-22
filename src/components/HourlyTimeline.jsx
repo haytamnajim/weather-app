@@ -2,7 +2,7 @@ import React from 'react';
 import { getWeatherIcon } from '../utils/helpers';
 import { WiRaindrop } from 'react-icons/wi';
 
-const HourlyTimeline = ({ forecast, unit = 'C', convertTemp, language = 'fr' }) => {
+const HourlyTimeline = React.memo(({ forecast, unit = 'C', convertTemp, language = 'fr' }) => {
   if (!forecast || !forecast.list || forecast.list.length === 0) {
     return null;
   }
@@ -73,5 +73,7 @@ const HourlyTimeline = ({ forecast, unit = 'C', convertTemp, language = 'fr' }) 
     </div>
   );
 };
+
+HourlyTimeline.displayName = 'HourlyTimeline';
 
 export default HourlyTimeline;

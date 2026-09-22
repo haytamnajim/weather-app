@@ -23,6 +23,8 @@ import TemperatureToggle from './components/TemperatureToggle';
 import WeatherAlerts from './components/WeatherAlerts';
 import AirQuality from './components/AirQuality';
 import SunMoon from './components/SunMoon';
+import BentoDashboard from './components/BentoDashboard';
+import DashboardNavigation from './components/DashboardNavigation';
 import { FiMapPin, FiHeart } from 'react-icons/fi';
 
 function App() {
@@ -67,6 +69,7 @@ function App() {
   const [geoError, setGeoError] = useState('');
   const [showGeoError, setShowGeoError] = useState(false);
   const [city, setCity] = useState('Casablanca');
+  const [activeTab, setActiveTab] = useState('today');
 
   const handleGeolocation = () => {
     if (navigator.geolocation) {
@@ -223,69 +226,85 @@ function App() {
 
         {error && <div className="error">{error}</div>}
 
+        {/* Dashboard Navigation */}
+        <DashboardNavigation
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          language={language}
+        />
+
         {loading ? (
           <WeatherSkeleton />
         ) : (
           <main className="content">
-            <div className="main-weather-col">
-              {weather && (
-                <WeatherCardGlass
-                  weather={weather}
-                  onToggleFavorite={handleToggleFavorite}
-                  isFavorite={isFavorite}
+            {activeTab === 'today' && (
+              <BentoDashboard weather={weather} forecast={forecast} language={language}>
+                {weather && (
+                  <WeatherCardGlass
+                    weather={weather}
+                    onToggleFavorite={handleToggleFavorite}
+                    isFavorite={isFavorite}
+                    convertTemp={convertTemp}
+                    getUnitSymbol={getUnitSymbol}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <SunMoon
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <AirQuality
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {weather && (
+                  <WeatherAlerts
+                    weather={weather}
+                    language={language}
+                  />
+                )}
+                {forecast && (
+                  <HourlyTimeline
+                    forecast={forecast}
+                    unit={unit}
+                    convertTemp={convertTemp}
+                    language={language}
+                  />
+                )}
+                <ForecastSection
+                  forecast={forecast}
                   convertTemp={convertTemp}
                   getUnitSymbol={getUnitSymbol}
-                  language={language}
                 />
-              )}
-            </div>
-
-            {/* Alertes Météo */}
-            {weather && (
-              <WeatherAlerts
-                weather={weather}
-                language={language}
-              />
+                {forecast && (
+                  <WeatherCharts
+                    forecast={forecast}
+                    isDarkMode={isDarkMode}
+                    convertTemp={convertTemp}
+                  />
+                )}
+              </BentoDashboard>
             )}
 
-            {/* Qualité de l'Air */}
-            {weather && (
-              <AirQuality
-                weather={weather}
-                language={language}
-              />
+            {activeTab === 'forecast' && (
+              <div className="forecast-full">
+                <ForecastSection
+                  forecast={forecast}
+                  convertTemp={convertTemp}
+                  getUnitSymbol={getUnitSymbol}
+                />
+              </div>
             )}
 
-            {/* Soleil & Lune */}
-            {weather && (
-              <SunMoon
-                weather={weather}
-                language={language}
-              />
-            )}
-
-            {/* Timeline Heure par Heure 24h */}
-            {forecast && (
-              <HourlyTimeline
-                forecast={forecast}
-                unit={unit}
-                convertTemp={convertTemp}
-                language={language}
-              />
-            )}
-
-            <ForecastSection
-              forecast={forecast}
-              convertTemp={convertTemp}
-              getUnitSymbol={getUnitSymbol}
-            />
-
-            {forecast && (
-              <WeatherCharts
-                forecast={forecast}
-                isDarkMode={isDarkMode}
-                convertTemp={convertTemp}
-              />
+            {activeTab !== 'today' && activeTab !== 'forecast' && (
+              <div className="coming-soon">
+                <h2>{language === 'ar' ? 'قريباً' : 'Bientôt disponible'}</h2>
+                <p>{language === 'ar' ? 'هذه الميزة قيد التطوير' : 'Cette fonctionnalité est en cours de développement'}</p>
+              </div>
             )}
           </main>
         )}
